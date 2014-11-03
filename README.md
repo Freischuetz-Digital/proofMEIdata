@@ -12,6 +12,8 @@ For building a .XAR package you need apache-ANT installed on your machine. Use t
 ant
 ```
 
+This wil create a folder 'build' that includes the respective XAR for deployment in eXist-db.
+
 Latest Version 0.5.0alpha
 -------------------------
 
