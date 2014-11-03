@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<meta xmlns="http://exist-db.org/xquery/repo"><description>Freischuetz Tools</description><author>Daniel Röwenstrunk</author><author>Daniel Röwenstrunk</author><website/><status>alpha</status><license>GNU-LGPL</license><copyright>true</copyright><type>application</type><target>freidi-tools</target><prepare>pre-install.xql</prepare><finish/><permissions user="freidi" password="freidi" group="freidi" mode="rw-rw-r--"/></meta>

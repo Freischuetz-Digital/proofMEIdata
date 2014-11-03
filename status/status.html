@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:mei="htp://www.music-encoding.org/ns/mei"><head><title>File Status</title><link href="../resources/css/bootstrap.css" rel="stylesheet"/><link href="../resources/css/bootstrap-responsive.min.css" rel="stylesheet"/><link href="../resources/css/bootswatch.css" rel="stylesheet"/><link href="../resources/css/freidi.css" rel="stylesheet"/><link href="../resources/css/ptsans.css" rel="stylesheet"/><style type="text/css">
+            
+            .source {
+                width: 1200px;
+            }
+            
+            .source h5 {
+                margin-bottom: 0;
+            }
+            
+            .source .label {
+                float: right;
+                margin-top: -3px;
+            }
+            
+            .measureBar {
+                box-shadow: 1px 1px 3px #000000 inset;
+                border-radius: 4px;
+                height: 14px;
+                display: inline-block;
+                margin-top: -5px;
+            }
+            
+            .measureBar .mov {
+                display: block;
+                float: left;
+                height: 14px;
+                border-left: 1px solid rgba(0,0,0,0.4);
+            }
+            
+            .measureBar .mov:first-child {
+                border-left: none;
+                border-radius: 4px 0 0 4px;
+            }
+            
+            .measureBar .mov:last-child {
+                border-radius: 0 4px 4px 0;
+            }
+            
+            .filled {
+                background-color: rgba(255,170,0,0.4);
+            }
+            
+            .unfilled {
+                background-color: rgba(100,100,100,0.4);
+            }
+            
+            .green {
+                background-color: rgba(30,255,0,0.4);
+            }
+            
+            .blue {
+                background-color: rgba(0,30,255,0.4);
+            }
+            
+            .red {
+                background-color: rgba(255,0,0,0.4);
+            }
+            
+            .checked {
+                background-color: rgba(100,255,0,0.4);
+            }
+            
+            #legend {
+                position: absolute;
+                top: 30px;
+                right: 30px;
+                width: 160px;
+                border-radius: 8px;
+                background-color: #f5f5f5;
+                padding: 13px 20px 10px;
+                border: 1px solid #cccccc;
+            }
+            
+            #legend .color {
+                height: 14px;
+                width: 20px;
+                float: left;
+                clear: both;
+                border-radius: 4px;
+                box-shadow: 1px 1px 3px #000000 inset;
+                margin-right: 10px;
+            }
+            
+            #legend .explanation {
+                margin-top: -3px;
+            }
+            
+        </style></head><body data-spy="scroll" data-target="#navbar" data-offset="30"><div class="container"><div class="row" id="mainRow"><h1>Status of Files</h1><div id="legend"><div class="color unfilled"/><div class="explanation">measure positions</div><div class="color filled"/><div class="explanation">blueprinted music</div><div class="color checked"/><div class="explanation">music corrected</div></div><div id="results"/></div></div><script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js" type="text/javascript"/><script src="../resources/js/bootstrap.js" type="text/javascript"/><script src="../resources/js/bootswatch.js" type="text/javascript"/><script src="http://d3js.org/d3.v3.min.js" type="text/javascript" charset="utf-8"/><script src="status.js" type="text/javascript"/></body></html>
