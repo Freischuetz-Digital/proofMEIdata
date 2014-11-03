@@ -6,16 +6,16 @@ The proofMEIdata Suite is a set of tools for proofreading MEI encoded XML-files.
 Building
 --------
 
-For building a .XAR package you need apache-ANT installed on your machine and an isntance of saxon9he.jar. Use the following command for building:
+For building a .XAR package you need apache-ANT installed on your machine. Use the following command for building:
 
 ```
-ant -lib PATH\TO\SAXON.jar
+ant
 ```
 
 Latest Version 0.5.0alpha
 -------------------------
 
-- this version has mere documentary purposes and documents the latest status from the database beoreswitching to github development. 
+- this version has mere documentary purposes and documents the latest status from the database before switching to github development.
 
 License
 -------
