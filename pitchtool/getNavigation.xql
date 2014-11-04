@@ -53,7 +53,7 @@ declare function local:getPages($source as xs:string, $mdiv as xs:string) as xs:
 };
 
 declare function local:getStaves($source as xs:string, $mdiv as xs:string) as xs:string* {
-    let $mdiv := doc('/db/apps/data/sources/' || substring-before($source, '_merged') || '.xml')/id($mdiv)
+    let $mdiv := doc('/db/apps/pitchtool-data/' || $source || '.xml')/id($mdiv)
     let $staves := ($mdiv//mei:scoreDef)[1]//mei:staffDef
     return
         for $staff in $staves
@@ -70,7 +70,7 @@ return
     string-join(
         for $source in $sources
         return
-            '{"sigle": "' || substring-before($source, '_') || '",' ||
+            '{"sigle": "' || $source || '",' ||
             '"mdivs": [' || string-join(local:getMdivs($source), ',') || ']' ||
             '}'
     , ',')
