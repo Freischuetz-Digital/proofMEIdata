@@ -45,6 +45,7 @@ declare function local:getPages($source as xs:string, $mdiv as xs:string) as xs:
     let $pages := xmldb:get-child-resources('/db/apps/pitchtool-data/' || $source || '/' || $mdiv)
     return
         for $page in $pages
+        where starts-with($page, $source)
         order by $page
         return
             '{"id": "' || substring-before($page, '.xml') || '",' ||
