@@ -54,8 +54,8 @@ declare function local:getPages($source as xs:string, $mdiv as xs:string) as xs:
 };
 
 declare function local:getStaves($source as xs:string, $mdiv as xs:string) as xs:string* {
-    let $mdiv := doc('/db/apps/pitchtool-data/' || $source || '.xml')/id($mdiv)
-    let $staves := ($mdiv//mei:scoreDef)[1]//mei:staffDef
+    let $mdivByID := collection('/db/apps/pitchtool-data/' || $source || '/' || $mdiv)//id($mdiv)
+    let $staves := ($mdivByID//mei:scoreDef)[1]//mei:staffDef
     return
         for $staff in $staves
         let $label := if($staff/@label)then($staff/@label)else($staff/../@label || ' (' || count($staff/preceding-sibling::mei:staffDef) + 1 || ')')
