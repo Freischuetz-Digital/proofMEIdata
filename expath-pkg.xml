@@ -1,2 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package xmlns="http://expath.org/ns/pkg" name="http://freischuetz-digital.de/tools" abbrev="freidi-tools" version="0.1" spec="1.0"><title>Freischuetz Tools</title><dependency package="http://exist-db.org/apps/shared"/></package>
+<package xmlns="http://expath.org/ns/pkg" name="http://freischuetz-digital.de/tools" abbrev="freidi-tools" version="0.5.1alpha" spec="1.0">
+  <title>Freischuetz Tools</title>
+  <dependency package="http://exist-db.org/apps/shared"/>
+</package>
