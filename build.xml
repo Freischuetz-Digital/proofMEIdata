@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project default="xar" name="freidi-tools">
   
-  <property name="project.version" value="0.5.1alpha"/>
+  <property name="project.version" value="0.5.2alpha"/>
   <property name="project.app" value="freidi-tools"/>
   <property name="build.dir" value="build"/>
   
