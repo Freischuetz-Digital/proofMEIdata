@@ -1,5 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:mei="htp://www.music-encoding.org/ns/mei"><head><title>Proofreading Status</title><link href="../resources/css/bootstrap.css" rel="stylesheet"/><link href="../resources/css/bootstrap-responsive.min.css" rel="stylesheet"/><link href="../resources/css/bootswatch.css" rel="stylesheet"/><link href="../resources/css/freidi.css" rel="stylesheet"/><link href="../resources/css/ptsans.css" rel="stylesheet"/><style type="text/css">
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:mei="htp://www.music-encoding.org/ns/mei">
+  <!--
+- Freischütz-Digital
+- pmd.pitchControl
+- Copyright Johannes Kepper & Benjamin W. Bohl 2013.
+- kepper(at)edirom.de & bohl(at)edirom.de
+- 
+- http://www.github.com/edirom/ediromSourceManager
+- 
+- ## Description & License
+- 
+- This file is the index page for pmd.pitchControl status
+- 
+- This program is free software: you can redistribute it and/or modify
+- it under the terms of the GNU General Public License as published by
+- the Free Software Foundation, either version 3 of the License, or
+- (at your option) any later version.
+- 
+- This program is distributed in the hope that it will be useful,
+- but WITHOUT ANY WARRANTY; without even the implied warranty of
+- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+- GNU General Public License for more details.
+- 
+- You should have received a copy of the GNU General Public License
+- along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+    <head>
+    <title>Proofreading Status</title>
+    <link href="../resources/css/bootstrap.css" rel="stylesheet" />
+    <link href="../resources/css/bootstrap-responsive.min.css" rel="stylesheet" />
+    <link href="../resources/css/bootswatch.css" rel="stylesheet" />
+    <link href="../resources/css/freidi.css" rel="stylesheet" />
+    <link href="../resources/css/ptsans.css" rel="stylesheet" />
+    <style type="text/css">
             
             .source {
                 width: 1200px;
@@ -88,9 +122,57 @@
                 margin-top: -3px;
             }
             
-        </style></head><body data-spy="scroll" data-target="#navbar" data-offset="30"><div class="navbar navbar-fixed-top"><div class="navbar-inner"><div class="container"><a class="brand" href="/index.html">Freischütz<br/><small>Digital</small></a><ul class="nav"><li><a href="/index.html">Projekt</a></li><li><a href="/edition/">Edition</a></li><li class="disabled"><a href="#">ReferenceTool</a></li><li class="active"><a href="#">PitchTool</a></li><li class="disabled"><a href="#">ControlEventTool</a></li></ul></div></div></div><div class="subnavs"><div class="navbar-inner"><div class="container">
-    				<!-- TODO selectors for "by source", "by movement", "source" -->
-    				<!--<select id="availSources" class="span1 freiDi_param"/>
+        </style>
+  </head>
+  <body data-spy="scroll" data-target="#navbar" data-offset="30">
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/index.html">Freischütz<br /><small>Digital</small></a>
+          <ul class="nav">
+            <li><a href="/index.html">Projekt</a></li>
+            <li><a href="/edition/">Edition</a></li>
+            <li class="disabled"><a href="#">ReferenceTool</a></li>
+            <li class="active"><a href="#">PitchTool</a></li>
+            <li class="disabled"><a href="#">ControlEventTool</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="subnavs">
+      <div class="navbar-inner"
+          ><div class="container">
+          <!-- TODO selectors for "by source", "by movement", "source" -->
+          <!--<select id="availSources" class="span1 freiDi_param"/>
     				<select id="availMdivs" class="span2 freiDi_param"/>
     				<select id="availVoices" class="span2 freiDi_param"/>
-    				<select id="availPages" class="span2 freiDi_param"/>--></div></div></div><div class="container"><div class="row" id="mainRow"><h1>Proofreading Status</h1><div id="results" class="span9"/><div class="span3"><div id="legend"><div class="color unfilled"/><div class="explanation">measure positions</div><div class="color filled"/><div class="explanation">blueprinted music</div><div class="color checked"/><div class="explanation">music corrected</div></div><div id="pageStatus"><div class="explanation">Selected Page Status</div><div class="color filled"/></div></div></div></div><script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js" type="text/javascript"/><script src="../resources/js/bootstrap.js" type="text/javascript"/><script src="../resources/js/bootswatch.js" type="text/javascript"/><script src="http://d3js.org/d3.v3.min.js" type="text/javascript" charset="utf-8"/><script src="status_pt3.js" type="text/javascript"/></body></html>
+    				<select id="availPages" class="span2 freiDi_param"/>-->
+          </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row" id="mainRow"><h1>Proofreading Status</h1>
+        <div id="results" class="span9"></div>
+        <div class="span3">
+          <div id="legend">
+            <div class="color unfilled"></div>
+            <div class="explanation">measure positions</div>
+            <div class="color filled"></div>
+            <div class="explanation">blueprinted music</div>
+            <div class="color checked"></div>
+            <div class="explanation">music corrected</div>
+          </div>
+          <div id="pageStatus">
+            <div class="explanation">Selected Page Status</div>
+            <div class="color filled"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js" type="text/javascript"></script>
+    <script src="../resources/js/bootstrap.js" type="text/javascript"></script>
+    <script src="../resources/js/bootswatch.js" type="text/javascript"></script>
+    <script src="http://d3js.org/d3.v3.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="status_pt3.js" type="text/javascript"></script>
+  </body>
+</html>
