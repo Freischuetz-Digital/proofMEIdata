@@ -29,7 +29,7 @@ declare namespace mei="http://www.music-encoding.org/ns/mei";
 
 (:import module namespace functx="http://www.functx.com";:)
 
-import module namespace functx="http://www.functx.com" at "/db/apps/EdiromOnline/data/xqm/functx-1.0-nodoc-2007-01.xq";
+import module namespace functx="http://www.functx.com";
 
 
 declare option exist:serialize "method=xml media-type=text/plain omit-xml-declaration=yes";
