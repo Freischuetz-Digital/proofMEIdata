@@ -161,6 +161,7 @@ return
                         attribute json:array {"true"},
                         element label {string($mvmt/@name)},
                         for $page in $mvmt/resource
+                        where $page/@mime = 'application/xml' and doc($page/@path)//mei:mei
                         return
                             element pages {
                                 element checked { attribute json:literal{"true"},local:checkStaves($page/@path)},
