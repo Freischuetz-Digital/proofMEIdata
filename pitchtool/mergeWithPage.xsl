@@ -34,8 +34,8 @@
     </xd:desc>
   </xd:doc>
   <xsl:output method="xml" indent="yes"/>
-  <xsl:param name="pageFilePath" as="xs:string"/>
-  <xsl:param name="staffN" as="xs:string"/>
+  <xsl:param name="pageFilePath" as="xs:string">A_page127.xml</xsl:param>
+  <xsl:param name="staffN" as="xs:string">1</xsl:param>
   <xsl:param name="resp" select="''" as="xs:string"/>
   <xsl:variable name="pageFile" select="doc($pageFilePath)"/>
   <xsl:variable name="changedFile" select="//mei:score"/>
@@ -228,7 +228,7 @@
           <xsl:apply-templates select="$changedElem/(node() | @*)"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:apply-templates select="node() | @n"/>
+          <xsl:apply-templates select="node() | @*"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:copy>
