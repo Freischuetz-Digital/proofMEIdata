@@ -70,7 +70,7 @@ var controlevents = (function(){
             obj.curvedir = 'above';
             
             editor.getTemplate(type,obj.id);
-            loadSlur(obj);
+            loadSlur(obj, true);
         }
         
         guiEditor.loadControlEvent(obj,sourcePath);
@@ -96,7 +96,7 @@ var controlevents = (function(){
     };
     
     //doc: ein element in die Liste laden
-    var loadSlur = function(slur) {
+    var loadSlur = function(slur, created) {
         
         var placement = '';
         if(slur.tstamp === '' && slur.startIDs.length === 1 && slur.endIDs.length === 1)
@@ -107,6 +107,10 @@ var controlevents = (function(){
             placement = 'multiResolve';
         
         var tmpl = jQuery('#templates tr.slurRow').clone();
+        
+        if(typeof created != 'undefined')
+            tmpl.attr('data-new', true);
+        
         tmpl.attr('id','tableRow_' + slur.id);
         tmpl.children('.staff').text(slur.staff);
         

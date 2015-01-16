@@ -211,6 +211,10 @@ var guiEditor = (function() {
         $('#slurTstamp').val('');
         $('#slurTstamp2').val('');
         
+        $('g.note, g.rest').off();
+        $('#slurStartBox').html('');
+        $('#slurEndBox').html('');
+        
         /*controlEvent = null;
         currentStarts.length = 0;
         currentEnds.length = 0;
@@ -237,15 +241,13 @@ var guiEditor = (function() {
             
             obj.id = controlEvent.id;
             obj.sourcePath = sourcePath;
-            obj.operation = 'change';
+            obj.operation = (typeof $('#tableRow_' + obj.id).attr('data-new') != 'undefined'?'create':'change');
             obj.code = editor.getEditorValue();
             
             var pos = -1;
             for(var i = 0; i< changedArray.length;i++) {
                 if(changedArray[i].id === obj.id)
-                    return i;
-                else
-                    return;
+                    pos = i;
             }
             
             if(pos === -1)
@@ -256,8 +258,8 @@ var guiEditor = (function() {
     };
     
     var setChanged = function() {
-        storeControlEvent();
         controlEvent.changed = true;
+        storeControlEvent();
     };
     
     
@@ -484,15 +486,22 @@ var guiEditor = (function() {
         obj.code = '';
         
         unloadControlEvent();
-        changedArray.push(obj);
         
-        console.log('deleted current controlEvent (' + controlEvent.id + ')');
+        var pos = -1;
+        for(var i = 0; i< changedArray.length;i++) {
+            if(changedArray[i].id === obj.id)
+                pos = i;
+        }
+        
+        if(pos === -1)
+            changedArray.push(obj);
+        else
+            changedArray[pos] = obj;
+    
+        console.log('deleted current controlEvent (' + obj.id + ')');
     };
     
-    //TODO: Store to server, muss aber noch ;-) 
     var save = function() {
-        
-        console.log(changedArray);
         
         if(changedArray.length === 0)
             return;
@@ -505,20 +514,22 @@ var guiEditor = (function() {
                 operation: changedArray[i].operation,
                 sourcePath: changedArray[i].sourcePath
             });
-            $(object).text(changedArray[i].code);
+            $(object).append(changedArray[i].code);
             $(objects).append($(object));
         }
         
-        console.log($(objects));
+        objects = $('<div></div>').append($(objects));
         
-        $.ajax('resources/xql/saveMEI.xql', {
-            method: 'post',
-            data: '',
-            success: function(result) {
-               
+        $.ajax({
+            url:'resources/xql/saveMEI.xql',
+            type:"POST",
+            data:$(objects).html(),
+            contentType:"application/xml; charset=utf-8",
+            dataType:"xml",
+            success: function(){
+                console.log(arguments);
             }
-        });    
-            
+        });
     };
     
     return {
