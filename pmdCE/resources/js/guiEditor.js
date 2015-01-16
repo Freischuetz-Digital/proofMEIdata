@@ -527,7 +527,8 @@ var guiEditor = (function() {
             contentType:"application/xml; charset=utf-8",
             dataType:"xml",
             success: function(){
-                console.log(arguments);
+                //console.log(arguments);
+                changedArray = new Array();
             }
         });
     };
