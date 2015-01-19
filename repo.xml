@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <meta xmlns="http://exist-db.org/xquery/repo">
-  <description>Freischuetz Tools</description>
+  <description>FreiDi:proofMEIdata</description>
   <author>Johannes Kepper</author>
   <author>Daniel Röwenstrunk</author>
   <author>Benjamin W. Bohl</author>
@@ -9,7 +9,7 @@
   <license>GNU GPL-3</license>
   <copyright>true</copyright>
   <type>application</type>
-  <target>freidi-tools</target>
+  <target>proofMEIdata</target>
   <prepare>pre-install.xql</prepare>
   <finish/>
   <permissions user="freidi" password="freidi" group="freidi" mode="rw-rw-r--"/>

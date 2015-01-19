@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package xmlns="http://expath.org/ns/pkg" name="http://freischuetz-digital.de/tools" abbrev="freidi-tools" version="0.6.0-alpha" spec="1.0">
-  <title>Freischuetz Tools</title>
+<package xmlns="http://expath.org/ns/pkg" name="http://freischuetz-digital.de/proofMEIdata" abbrev="proofMEIdata" version="0.6.0-alpha" spec="1.0">
+    <title>FreiDi:proofMEIdata</title>
   <dependency package="http://exist-db.org/apps/shared"/>
   <dependency package="http://www.functx.com"/>
 </package>
