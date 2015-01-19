@@ -2,19 +2,54 @@ xquery version "3.0";
 
 declare namespace mei="http://www.music-encoding.org/ns/mei";
 
-(:import module namespace functx="http://www.functx.com";:)
-
-import module namespace functx="http://www.functx.com" at "/db/apps/EdiromOnline/data/xqm/functx-1.0-nodoc-2007-01.xq";
-
+import module namespace functx="http://www.functx.com";
 
 declare option exist:serialize "method=xml media-type=text/plain omit-xml-declaration=yes";
 
+declare function local:findMeasure($doc, $startIds) {
+    let $measures := for $startId in $startIds
+                        return
+                            $doc/id(substring-after($startId, '#'))/ancestor::mei:measure
+    return $measures[1]
+};
+
 let $xml := request:get-data()
-let $staffN := request:get-parameter('staffN', '')
-let $path := request:get-parameter('path', '')
-(:let $user := xmldb:get-current-user()
-let $doc := transform:transform($xml, doc('mergeWithPage.xsl'), <parameters><param name="staffN" value="{$staffN}"/><param name="pageFilePath" value="/db/apps/controlevents-data/{$path}"/><param name="resp" value="{$user}"/></parameters>)
-let $result := xmldb:store(concat('/db/apps/controlevents-data/', functx:substring-before-last($path, '/')), functx:substring-after-last($path, '/'), $doc)
-:)return
-    ''
-    
+let $user := xmldb:get-current-user()
+let $change :=
+    for $x in $xml/div/div
+    let $source := $x/string(@sourcepath)
+    let $id := $x/string(@id)
+    let $operation := $x/string(@operation)
+    let $content := $x/*
+    let $startIDs := $content/descendant-or-self::mei:slur/string(@startid)
+    let $doc := doc('/db/apps/controlevents-data/' || $source)
+    let $measure := local:findMeasure($doc, $startIDs)
+    let $change := 
+        switch($operation)
+            case 'create' return
+                let $result := update insert $content into $measure
+                return local-name($content) || ' with ID ' || $id || ' added'
+            case 'change' return
+                let $result := update delete $doc/id($id)
+                let $result := update insert $content into $measure
+                return local-name($content) || ' with ID ' || $id || ' changed'
+            case 'remove' return
+                let $result := update delete $doc/id($id)
+                return local-name($content) || ' with ID ' || $id || ' removed'
+            default return 'null'
+        
+    let $changeElem := <change n="{count($doc//mei:change) + 1}" xmlns="http://www.music-encoding.org/ns/mei">
+                            <respStmt>
+                                <persName>{$user}</persName>
+                            </respStmt>
+                            <changeDesc>
+                                <p>pmdCE on {$source}: {string-join($change, ', ')}</p>
+                            </changeDesc>
+                            <date isodate="{substring(string(current-dateTime()),1,19)}"/>
+                        </change>
+    let $result := update insert $changeElem into $doc//mei:revisionDesc
+        return
+        $changeElem
+
+return
+    <result>{$change}</result>
