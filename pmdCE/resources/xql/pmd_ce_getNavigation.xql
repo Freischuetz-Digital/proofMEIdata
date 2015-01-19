@@ -33,7 +33,7 @@ return
     string-join(
         for $source in $sources
         return
-            '{"sigle": "' || substring-before($source, '_') || '",' ||
+            '{"sigle": "' || $source || '",' ||
             '"mdivs": [' || string-join(local:getMdivs($source), ',') || ']' ||
             '}'
     , ',')
