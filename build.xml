@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project default="xar" name="freidi-tools">
+<project default="xar" name="proofMEIdata">
   
-  <property name="project.version" value="0.5.5alpha"/>
-  <property name="project.app" value="freidi-tools"/>
+  <property name="project.version" value="0.6.0-alpha"/>
+  <property name="project.app" value="proofMEIdata"/>
   <property name="build.dir" value="build"/>
   
   <target name="xar">
