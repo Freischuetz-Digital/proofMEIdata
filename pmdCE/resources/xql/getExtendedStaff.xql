@@ -19,6 +19,7 @@ let $xslbase := concat(replace(system:get-module-load-path(), 'embedded-eXist-se
 let $doc := doc('/db/apps/controlevents-data/' || $path)
 
 let $snippet := transform:transform($doc, doc($xslbase || 'stripPage2staff.xsl'), <parameters><param name="staffID" value="{$staffID}"/><param name="id_prefix" value="{$id_prefix}"/></parameters>)
+let $preparedSnippet := transform:transform($snippet, doc($xslbase || 'prepareRendering.xsl'), <parameters></parameters>)
 
 return 
-    $snippet
+    $preparedSnippet
