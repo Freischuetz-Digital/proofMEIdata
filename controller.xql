@@ -1,7 +1,7 @@
 xquery version "3.0";
 
 import module namespace freidi-rest="http://freischuetz-digital.de/freidi-tools/rest" at "modules/rest.xql";
-import module namespace freidi-app="http://freischuetz-digital.de/freidi-tools/app" at "modules/app.xql";
+import module namespace freidi-pmd="http://www.freischuetz-digital.de/proofMEIdata" at "modules/app.xql";
 
 declare namespace control="http://edirom.de/apps/freidi/controller";
 
@@ -51,7 +51,7 @@ else if ($exist:path eq "/") then
     </dispatch>    
 else if ($exist:path eq "/login/doLogin") then (
     util:declare-option("exist:serialize", "method=json media-type=application/json"),
-    freidi-app:login()    
+    freidi-pmd:login()    
 )
 else if (xmldb:get-current-user() = "guest" and ends-with($exist:resource, ".html") and $exist:resource != 'login.html') then
     <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
