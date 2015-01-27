@@ -55,7 +55,7 @@ else if ($exist:path eq "/login/doLogin") then (
 )
 else if (xmldb:get-current-user() = "guest" and ends-with($exist:resource, ".html") and $exist:resource != 'login.html') then
     <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-        <redirect url="login/login.html?path={encode-for-uri($exist:path)}"/>        
+        <redirect url="{control:get-tools-root-path(request:get-uri())}/login/login.html?path={encode-for-uri($exist:path)}"/>        
     </dispatch>
 
 else if (ends-with($exist:resource, ".html")) then
