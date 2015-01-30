@@ -1,5 +1,7 @@
 xquery version "3.0";
 
+import module namespace freidi-pmd="http://www.freischuetz-digital.de/proofMEIdata" at "../../../modules/app.xql";
+
 declare namespace request="http://exist-db.org/xquery/request";
 declare namespace mei="http://www.music-encoding.org/ns/mei";
 declare namespace tei="http://www.tei-c.org/ns/1.0";
@@ -7,7 +9,22 @@ declare namespace xmldb="http://exist-db.org/xquery/xmldb";
 declare namespace system="http://exist-db.org/xquery/system";
 declare namespace transform="http://exist-db.org/xquery/transform";
 
-declare option exist:serialize "method=xhtml media-type=text/html omit-xml-declaration=yes indent=yes";
+(:  :declare option exist:serialize "method=xhtml media-type=text/html omit-xml-declaration=yes indent=yes";:)
+declare option exist:serialize "method=text media-type=text/plain omit-xml-declaration=yes";
+
+
+declare variable $path := request:get-parameter('path', '');
+declare variable $staffN := request:get-parameter('staff', '');
+
+declare variable $resourceName := tokenize($path,'/')[last()];
+declare variable $parentCollectionURI := substring-before($path, $resourceName);
+
+declare variable $doc := doc($freidi-pmd:ce-data || $path);
+
+declare variable $slurs := $doc//(mei:slur[not(./parent::mei:*/parent::mei:choice)]|mei:choice[.//mei:slur]);
+declare variable $hairpins := $doc//mei:hairpin;
+declare variable $dynams := $doc//mei:dynam;
+declare variable $dirs := $doc//mei:dir;
 
 declare function local:jsonifySlurs($slurs) {
 
@@ -33,7 +50,10 @@ declare function local:jsonifySlurs($slurs) {
                     let $layer :=  $event/ancestor::mei:layer
                     let $predecessors := $layer//mei:*[local-name() = ('note','chord') and not(parent::mei:chord) and following::mei:*[@xml:id = $event/@xml:id]]
                     
-                    let $endEvent := $elem/root()/id(substring($endID,2))
+                    let $endUri := concat($freidi-pmd:ce-data,$parentCollectionURI)
+                    let $endEvent := if($elem/root()/id(substring($endID,2)))then($elem/root()/id(substring($endID,2)))else(collection($endUri)/id(substring($endID,2)))
+                    let $endPageName := concat($endEvent/root()/mei:mei/@xml:id,'.xml')
+                    
                     let $endStaff := $endEvent/ancestor::mei:staff
                     let $endLayer :=  $endEvent/ancestor::mei:layer
                     let $endMeasure := $endLayer/ancestor::mei:measure
@@ -62,7 +82,10 @@ declare function local:jsonifySlurs($slurs) {
                             '"curvedir":"',$curvedir,'",',
                             '"staff":"',$staffText,'",',
                             '"startStaffID":"',$staff/@xml:id,'",',
-                            '"endStaffID":"',$endStaff/@xml:id,'"',
+                            '"endStaffID":"',$endStaff/@xml:id,'",',
+                            '"endPageName":"',$endPageName,'",',
+                            '"placement":"',$placement,'",',
+                            '"xml":"',replace(replace(serialize($elem),'"','&amp;#x0027;'),'\n',''),'"',
                             '}')
                     
                         (:concat('{"id":"',$id,'",',
@@ -124,28 +147,16 @@ declare function local:jsonifyDirs($dirs) {
     
 };
 
-let $path := request:get-parameter('path', '')
-let $staffN := request:get-parameter('staff', '')
+(:concat('["',string-join($sources/@xml:id,'","'),'"]'):)
+(
+    '{"slurs":[',
+        local:jsonifySlurs($slurs),
+    '],"hairpins":[',
+        local:jsonifyHairpins($hairpins),
+    '],"dynams":[',
+        local:jsonifyDynams($dynams),
+    '],"dirs":[',
+        local:jsonifyDirs($dirs),
+    ']}'
 
-let $doc := doc('/db/apps/controlevents-data/' || $path)
-
-let $slurs := $doc//(mei:slur[not(./parent::mei:*/parent::mei:choice)]|mei:choice[.//mei:slur])
-let $hairpins := $doc//mei:hairpin
-let $dynams := $doc//mei:dynam
-let $dirs := $doc//mei:dir
-
-return
-    (:concat('["',string-join($sources/@xml:id,'","'),'"]'):)
-    (
-        '{"slurs":[',
-            local:jsonifySlurs($slurs),
-        '],"hairpins":[',
-            local:jsonifyHairpins($hairpins),
-        '],"dynams":[',
-            local:jsonifyDynams($dynams),
-        '],"dirs":[',
-            local:jsonifyDirs($dirs),
-        ']}'
-    
-    )
-    
+)
