@@ -67,6 +67,7 @@ var controlevents = (function(){
         if(type === 'slur') {
             obj.endIDs = new Array();
             obj.endStaffID = '';
+            obj.endPageName = String(sourcePath).split('/').pop(-1);
             obj.curvedir = 'above';
             
             editor.getTemplate(type,obj.id);
