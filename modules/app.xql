@@ -3,6 +3,8 @@ xquery version "3.0";
 module namespace freidi-pmd = 'http://www.freischuetz-digital.de/proofMEIdata';
 
 declare variable $freidi-pmd:facsimileServerURI := 'http://www.freischuetz-digital.de';
+declare variable $freidi-pmd:ce-data := '/db/apps/controlevents-data/';
+
 
 import module namespace templates="http://exist-db.org/xquery/templates" ;
 import module namespace config="http://freischuetz-digital.de/tools/config" at "config.xqm";
