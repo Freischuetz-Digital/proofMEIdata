@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" exclude-result-prefixes="xs xd mei" version="2.0">
+<xsl:stylesheet xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xmldb="http://exist-db.org/xquery/xmldb" xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" exclude-result-prefixes="xs xd mei" version="2.0">
     <xd:doc scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -8,11 +8,17 @@
                 <xd:b>Author:</xd:b> Johannes Kepper</xd:p>
             <xd:p>This stylesheet removes all contents from mei:staff. They need to be filled in 
                 for saving the results.</xd:p>
+            <xd:p>
+                <xd:b>Editor:</xd:b> Benjamin W. Bohl</xd:p>
         </xd:desc>
     </xd:doc>
+    <xsl:output method="xml" indent="yes"/>
+    <xsl:param name="path" as="xs:string"/>
     <xsl:param name="staffID" as="xs:string"/>
     <xsl:param name="id_prefix" as="xs:string"/>
-    <xsl:output method="xml" indent="yes"/>
+    <xsl:param name="endPageName" as="xs:string"/>
+    <xsl:variable name="resource" select="tokenize($path,'/')[last()]"/>
+    <xsl:variable name="collection" select="substring-before($path,$resource)"/>
     <xsl:variable name="staff" select="id($staffID)" as="node()"/>
     <xsl:variable name="providedScoreDef" select="//mei:meiHead//mei:scoreDef" as="node()?"/>
     <xsl:variable name="providedStaffDef" select="//mei:meiHead//mei:scoreDef//mei:staffDef[@n = $staff/@n]" as="node()?"/>
@@ -24,19 +30,26 @@
     <xsl:variable name="nextMeasure" as="node()">
         <xsl:choose>
             <xsl:when test="not($crossesPage)">
-                <xsl:copy-of select="$measure/(following::mei:measure)[1]"/>
+                <xsl:copy-of select="($measure/following::mei:measure)[1]"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:variable name="docname" select="substring-before(tokenize(document-uri(root()),'/')[last()],'.xml')" as="xs:string"/>
+                <xsl:variable name="docname" select="tokenize($path,'/')[last()]" as="xs:string"/>
+                <xsl:variable name="isSystem" select="matches($docname,'_sys\d+.xml')" as="xs:boolean"/>
+                <xsl:variable name="isPage" select="matches($docname,'_page\d+.xml')" as="xs:boolean"/>
                 <xsl:variable name="nextDoc">
-                    <xsl:variable name="isSystem" select="matches($docname,'_sys\d+.xml')" as="xs:boolean"/>
-                    <xsl:variable name="hasFollowingSystem" as="xs:boolean">
+                    <xsl:variable name="hasFollowingSystem" as="xs:boolean"><!--TODO wieder in Test einbeziehen-->
                         <xsl:choose>
                             <xsl:when test="$isSystem">
                                 <xsl:variable name="sysNo" select="number(substring-before(substring-after($docname,'_sys'),'.xml'))" as="xs:double"/>
                                 <xsl:variable name="nextSysName" select="replace($docname,concat('_sys',string($sysNo),'.xml'),concat('_sys',string($sysNo + 1),'.xml'))" as="xs:string"/>
-                                <xsl:variable name="nextSysPath" select="replace(document-uri(root()),$docname,$nextSysName)" as="xs:string"/>
+                                <xsl:variable name="nextSysPath" select="replace($path,$docname,$nextSysName)" as="xs:string"/>
                                 <xsl:value-of select="doc-available($nextSysPath)"/>
+                            </xsl:when>
+                            <xsl:when test="$isPage">
+                                <xsl:variable name="pageNo" select="number(substring-before(substring-after($docname,'_page'),'.xml'))" as="xs:double"/>
+                                <xsl:variable name="nextPageName" select="replace($docname,concat('_page',string($pageNo),'.xml'),concat('_page',string($pageNo + 1),'.xml'))" as="xs:string"/>
+                                <xsl:variable name="nextPagePath" select="replace($path,$docname,$nextPageName)" as="xs:string"/>
+                                <xsl:value-of select="doc-available($nextPagePath)"/>
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:value-of select="false()"/>
@@ -44,21 +57,22 @@
                         </xsl:choose>
                     </xsl:variable>
                     <xsl:choose>
-                        <xsl:when test="$hasFollowingSystem">
+                        <xsl:when test="$isSystem">
                             <xsl:variable name="sysNo" select="number(substring-before(substring-after($docname,'_sys'),'.xml'))" as="xs:double"/>
                             <xsl:variable name="nextSysName" select="replace($docname,concat('_sys',string($sysNo),'.xml'),concat('_sys',string($sysNo + 1),'.xml'))" as="xs:string"/>
                             <xsl:variable name="nextSysPath" select="replace(document-uri(root()),$docname,$nextSysName)" as="xs:string"/>
-                            <xsl:copy-of select="doc($nextSysPath)"/>
+                            <xsl:copy-of select="doc(concat('xmldb:exist:///',$nextSysPath))"/>
                         </xsl:when>
-                        <xsl:otherwise>
+                        <xsl:when test="$isPage">
                             <xsl:variable name="pageNo" select="number(substring-before(substring-after($docname,'_page'),'.xml'))" as="xs:double"/>
                             <xsl:variable name="nextPageName" select="replace($docname,concat('_page',string($pageNo),'.xml'),concat('_page',string($pageNo + 1),'.xml'))" as="xs:string"/>
-                            <xsl:variable name="nextPagePath" select="replace(document-uri(root()),$docname,$nextPageName)" as="xs:string"/>
-                            <xsl:copy-of select="doc($nextPagePath)"/>
-                        </xsl:otherwise>
+                            <xsl:variable name="nextPagePath" select="replace($path,$docname,$nextPageName)" as="xs:string"/>
+                            <xsl:copy-of select="doc(concat('xmldb:exist:///',$nextPagePath))"/>
+                        </xsl:when>
+                        <xsl:otherwise/>
                     </xsl:choose>
                 </xsl:variable>
-                <xsl:copy-of select="$nextDoc//(mei:measure)[1]"/>
+                <xsl:copy-of select="($nextDoc//mei:measure)[1]"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -187,4 +201,5 @@
             <xsl:apply-templates select="node() | @*" mode="#current"/>
         </xsl:copy>
     </xsl:template>
+    <xsl:template match="processing-instruction()"/>
 </xsl:stylesheet>
