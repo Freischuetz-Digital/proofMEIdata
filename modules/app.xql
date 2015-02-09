@@ -1,11 +1,15 @@
 xquery version "3.0";
 
-module namespace freidi-app="http://freischuetz-digital.de/freidi-tools/app";
+module namespace freidi-pmd = 'http://www.freischuetz-digital.de/proofMEIdata';
+
+declare variable $freidi-pmd:facsimileServerURI := 'http://www.freischuetz-digital.de';
+declare variable $freidi-pmd:ce-data := '/db/apps/controlevents-data/';
+
 
 import module namespace templates="http://exist-db.org/xquery/templates" ;
 import module namespace config="http://freischuetz-digital.de/tools/config" at "config.xqm";
 
-declare function freidi-app:login() {
+declare function freidi-pmd:login() {
     try {
         let $user := request:get-parameter("username", ())
         let $password := request:get-parameter("password", ())

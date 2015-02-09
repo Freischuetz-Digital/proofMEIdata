@@ -54,7 +54,7 @@ var guiEditor = (function() {
             unloadControlEvent();
         }
         
-        //console.log('guiEditor.loadControlEvent(' + json.id + ', ' + path + ')');
+        console.log(json);
         
         controlEvent = json;
         sourcePath = path;
@@ -409,6 +409,7 @@ var guiEditor = (function() {
     };
     
     var getRendering = function(position){
+        console.log(controlEvent);
         
         if(['start','end'].indexOf(position) == -1)
             return;
@@ -416,27 +417,31 @@ var guiEditor = (function() {
         var staffID;
         var prefix;
         var selector;
+        var endPageName;
         
         if(position === 'start') {
             staffID = controlEvent.startStaffID;
             prefix = startPrefix;
             selector = '#' + controlEvent.type + 'StartBox';
+            endPageName = controlEvent.endPageName;
+
         } else {
             staffID = controlEvent.endStaffID;
             prefix = endPrefix;
             selector = '#' + controlEvent.type + 'EndBox';
+            endPageName = controlEvent.endPageName;
         }
         
         new jQuery.ajax('resources/xql/getExtendedStaff.xql', {
             method: 'get',
-            data: {path: sourcePath, staffID: staffID, id_prefix: prefix},
+            data: {path: sourcePath, staffID: staffID, id_prefix: prefix, endPageName: endPageName},
             success: function(result) {
                 var response = result || '';
                 
                 var options = JSON.stringify({ 
                     inputFormat: 'mei',
                     pageWidth: $(selector).width() * 3, 
-                    pageHeight: 75, 
+                    pageHeight: $(selector).height() * 2, 
                     border: 0,
                     ignoreLayout: 0 
                 });

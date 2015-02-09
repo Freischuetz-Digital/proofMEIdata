@@ -184,8 +184,6 @@
     background-color: #ffffff;
     box-shadow: 0 1px 3px rgba(0,0,0,0.5) inset;
     border-radius: 5px;
-    overflow: scroll;
-    padding: 10px;
     border: 1px solid #cccccc;
 }
 
@@ -196,8 +194,7 @@
     box-shadow: 0 1px 3px rgba(0,0,0,0.5) inset;
     border-radius: 5px;
     padding: 5px 10px;
-    overflow: hidden;
-    overflow-x: scroll;
+    overflow: scroll;
 }
 
 .staffBox2 svg {

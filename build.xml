@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project default="xar" name="proofMEIdata">
   
-  <property name="project.version" value="0.6.0-alpha"/>
+  <property name="project.version" value="0.6.2-alpha"/>
   <property name="project.app" value="proofMEIdata"/>
   <property name="build.dir" value="build"/>
   
   <target name="xar">
     <mkdir dir="${build.dir}"/>
-    <zip basedir="." destfile="${build.dir}/${project.app}-${project.version}.xar" excludes="${build.dir},${build.dir}/*, .gitattributes, .gitignore"/>
+    <zip basedir="." destfile="${build.dir}/${project.app}-${project.version}.xar" excludes="${build.dir},${build.dir}/*, .gitattributes, .gitignore, build.xml"/>
   </target>
 </project>

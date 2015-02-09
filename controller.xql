@@ -1,7 +1,7 @@
 xquery version "3.0";
 
 import module namespace freidi-rest="http://freischuetz-digital.de/freidi-tools/rest" at "modules/rest.xql";
-import module namespace freidi-app="http://freischuetz-digital.de/freidi-tools/app" at "modules/app.xql";
+import module namespace freidi-pmd="http://www.freischuetz-digital.de/proofMEIdata" at "modules/app.xql";
 
 declare namespace control="http://edirom.de/apps/freidi/controller";
 
@@ -34,37 +34,30 @@ declare %private function control:get-path-variables($input as xs:string, $templ
 
 declare %private function control:get-tools-root-path($path as xs:string) as xs:string {
     (:concat(substring-before($path, '/freidi-tools'), 'http://freischuetz-digital.de/freidi-tools'):)
-    concat(substring-before($path, '/freidi-tools'), '/freidi-tools')
+    concat(substring-before($path, '/proofMEIdata'), '/proofMEIdata')
 };
+
+
 
 if ($exist:path eq '') then
     <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-        <redirect url="{$exist:controller}/"/>
+        <redirect url="{concat(request:get-uri(), '/')}/"/>
     </dispatch>
     
 else if ($exist:path eq "/") then
     (: forward root path to index.xql :)
     <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-        <redirect url="{$exist:controller}/index.html"/>
+        <redirect url="index.html"/>
     </dispatch>    
 else if ($exist:path eq "/login/doLogin") then (
     util:declare-option("exist:serialize", "method=json media-type=application/json"),
-    freidi-app:login()    
+    freidi-pmd:login()    
 )
 else if (xmldb:get-current-user() = "guest" and ends-with($exist:resource, ".html") and $exist:resource != 'login.html') then
     <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-        <redirect url="{$exist:controller}/login/login.html?path={encode-for-uri($exist:path)}"/>        
+        <redirect url="{control:get-tools-root-path(request:get-uri())}/login/login.html?path={encode-for-uri($exist:path)}"/>        
     </dispatch>
-else if($exist:path = '/coreBuilder/index.html')
-then(
-    <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-        <view>
-            <forward url="{$exist:controller}/coreBuilder/index.xql">
-                <set-header name="Cache-Control" value="no-cache"/>
-            </forward>
-        </view>
-    </dispatch>
-)
+
 else if (ends-with($exist:resource, ".html")) then
     (: the html page is run through view.xql to expand templates :)
     <dispatch xmlns="http://exist.sourceforge.net/NS/exist">

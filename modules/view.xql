@@ -12,7 +12,7 @@ import module namespace templates="http://exist-db.org/xquery/templates" ;
  : templating.
  :)
 import module namespace config="http://freischuetz-digital.de/tools/config" at "config.xqm";
-import module namespace freidi-app="http://freischuetz-digital.de/freidi-tools/app" at "app.xql";
+import module namespace freidi-pmd="http://www.freischuetz-digital.de/proofMEIdata" at "app.xql";
 
 declare option exist:serialize "method=html5 media-type=text/html enforce-xhtml=yes";
 
