@@ -3,6 +3,11 @@ proofMEIdata
 
 The proofMEIdata Suite is a set of tools for proofreading MEI encoded XML-files. The suite is setup as eXist-db app.
 
+Code-Mamagement
+---------------
+
+We apply the git branching model as described at: http://nvie.com/posts/a-successful-git-branching-model/ and known more commonly as "gitflow".
+
 Building
 --------
 
@@ -14,10 +19,11 @@ ant
 
 This wil create a folder 'build' that includes the respective XAR for deployment in eXist-db.
 
-Latest Version 0.5.0alpha
--------------------------
+Versioning
+----------
 
-- this version has mere documentary purposes and documents the latest status from the database before switching to github development.
+We apply semantic versioning as proposed under : http://semver.org
+For a description of version differences please see: https://github.com/Freischuetz-Digital/proofMEIdata/releases
 
 License
 -------
