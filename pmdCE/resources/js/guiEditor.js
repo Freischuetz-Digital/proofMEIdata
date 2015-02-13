@@ -1,3 +1,13 @@
+/*
+ * guiEditor.js
+ * 
+ * responsible for:
+ * - load controleevent to guiEditor
+ * - gui Editor modification methods
+ * - store modifications to changedArray();
+ * - saving changes to database
+ */
+
 var guiEditor = (function() {
     
     var controlEvent = null;
@@ -16,6 +26,7 @@ var guiEditor = (function() {
     
     var placement;      // --> obvious | ambiguous | multiResolve
     
+    //array of changed control events
     var changedArray = new Array();
     
     //todo: selection.addSelectionChangeListener
@@ -507,6 +518,8 @@ var guiEditor = (function() {
     };
     
     var save = function() {
+    
+        console.log('init save in guiEditor.js');
         
         if(changedArray.length === 0)
             return;
@@ -532,7 +545,7 @@ var guiEditor = (function() {
             contentType:"application/xml; charset=utf-8",
             dataType:"xml",
             success: function(){
-                //console.log(arguments);
+                console.log(arguments);
                 changedArray = new Array();
             }
         });

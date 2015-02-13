@@ -1,3 +1,8 @@
+/* 
+ * This file is responsible for loading the page navigation and the facsimile
+ * and initializing all other components
+ */
+
 //Baustelle, nicht in Benutzung und (so) nicht funktionsfähig
 // Tool for retrieving URL Parameters, taken from http://jquery-howto.blogspot.de/2009/09/get-url-parameters-values-with-jquery.html
 
@@ -49,7 +54,7 @@ $(document.body).on( 'click', '.dropdown-menu li', function( event ) {
  
  $(document).ready(function() {
     
-    selection.init(); //Auswahl der Seite
+    selection.init(); //Auswahl der Seite --> toolbar
     facsimile.init();
     controlevents.init(); //Liste mit CE rechts, einiges an Verwaltung
     grid.init(); //"Raster" der staves auf dem Faksimile (prüfen) 
@@ -73,6 +78,7 @@ var selection = (function() {
 		$('#btnNextPage').on("click", nextPage);	
     };
     
+    // load navigation bar
     var load = function() {
         new jQuery.ajax('resources/xql/pmd_ce_getNavigation.xql', {
             method: 'get',

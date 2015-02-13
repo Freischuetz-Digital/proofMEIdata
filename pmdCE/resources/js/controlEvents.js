@@ -1,3 +1,12 @@
+/*
+ * controlevents.js
+ * 
+ * - load controlEvents for page from database
+ * - add new events
+ * - append HTML to controlEvent list
+ * - select controlEevent from controlEvent list
+ * 
+ */
 var controlevents = (function(){
     
     var init = function() {

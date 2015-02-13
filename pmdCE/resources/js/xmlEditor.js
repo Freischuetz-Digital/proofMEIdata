@@ -189,6 +189,7 @@ var editor = (function() {
     };
     
     var save = function() {
+        console.log('init save in xmlEditor.js');
     
         if($('#saveButton').hasClass('disabled')) return;
     

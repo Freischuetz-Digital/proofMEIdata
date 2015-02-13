@@ -1,3 +1,9 @@
+/*
+ * grid.js
+ * 
+ * Is responsible for superimposing staff and measure numbers, and sllur highlighting on the facsimile image
+ */
+
 var grid = (function() {
     
     var zones = null;
