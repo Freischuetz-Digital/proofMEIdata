@@ -45,7 +45,7 @@ var grid = (function() {
             method: 'get',
             data: {path: sourcePath, types: 'all'},
             success: function(result) {
-            
+                console.log('init grid.js : onSelectionChanged - ajax : getZones.xql success');
                 var response = result || '';
                 var json = jQuery.parseJSON(response);
                 
@@ -80,6 +80,7 @@ var grid = (function() {
     };
     
     var drawFacsimileLabels = function() {
+        console.log('init grid.js : drawFacsimileLabels');
         
         var measureZones = $.grep(zones, function(elem,index) {
             return elem.type === 'measure';
@@ -242,6 +243,11 @@ var grid = (function() {
     
     var showAllStaves = function(onClickFunc) {
         
+        console.log('init grid.js : showAllStaves');
+        
+        //TODO: escape if already cliocked
+        //TODO: add cancel option
+        
         var zoneArray = $.grep(zones, function(elem, index) {
             return elem.type === 'staff';
         });
@@ -256,7 +262,7 @@ var grid = (function() {
             tmpl.css('top',top + '%');
             tmpl.css('left', left + '%');
             tmpl.attr('title',zone.targetID);
-            tmpl.on('click',onClickFunc);
+            tmpl.on('click',[zone],onClickFunc);
             
             $('#overlaidItems').append(tmpl);
         }
@@ -331,7 +337,8 @@ var grid = (function() {
         drawSlur: drawSlur,
         setDimensions: setDimensions,
         highlightRect: highlightRect,
-        showAllStaves: showAllStaves
+        showAllStaves: showAllStaves,
+        zones: zones
     };
     
 })();
