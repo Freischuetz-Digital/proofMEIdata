@@ -79,7 +79,7 @@ var controlevents = (function(){
             obj.endPageName = String(sourcePath).split('/').pop(-1);
             obj.curvedir = 'above';
             
-            editor.getTemplate(type,obj.id);
+            editor.getTemplate(type,obj.id, );
             loadSlur(obj, true);
         }
         
@@ -282,6 +282,7 @@ var controlevents = (function(){
         addControleventChangeListener: addControleventChangeListener,
         removeControlEvent: removeControlEvent,
         highlightRow: highlightRow,
-        removeHighlight: removeHighlight
+        removeHighlight: removeHighlight,
+        currentEvent: currentEvent
     }
 })();

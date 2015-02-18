@@ -26,7 +26,6 @@ var guiEditor = (function() {
     
     var placement;      // --> obvious | ambiguous | multiResolve
     
-    //array of changed control events
     var changedArray = new Array();
     
     //todo: selection.addSelectionChangeListener
@@ -98,12 +97,16 @@ var guiEditor = (function() {
         $('#' + controlEvent.type + 'Placement .cePlacement').addClass(placement);
         
         var startStaffFunc = function() {
+            console.log('init guiEditor.js : startStaffFunc');
             grid.showAllStaves(setStartStaff);    
         };
         var endStaffFunc = function() {
+            console.log('init guiEditor.js : endStaffFunc');
             grid.showAllStaves(setEndStaff);    
         };
-        
+          
+          //onclick listener for startStaff end endStaff
+        //TODO rework to more expressive ID --> index.html
         $('#' + controlEvent.type + 'Tools .glyphicon-chevron-right').on('click',startStaffFunc);
         $('#' + controlEvent.type + 'Tools .glyphicon-chevron-left').on('click',endStaffFunc);
         
@@ -173,10 +176,19 @@ var guiEditor = (function() {
     };
     
     var setStartStaff = function(elem) {
+        console.log('init guiEditor.js : setStartStaff');
+        console.log(elem.data[0].n);
         grid.unhighlight();
         
         var staffID = $(this).attr('title');
+        console.log('staffID: ' + staffID);
+        
         controlEvent.startStaffID = staffID;
+        controlEvent.staff = elem.data[0].n;
+        editor.setAttribute('staff', elem.data[0].n);
+
+        
+        console.log(controlEvent);
         
         getRendering('start');
         setStartEndListeners();
@@ -184,6 +196,7 @@ var guiEditor = (function() {
     };
     
     var setEndStaff = function(elem) {
+        console.log('init guiEditor.js : setEndStaff');
         grid.unhighlight();
         
         var staffID = $(this).attr('title');
@@ -518,8 +531,7 @@ var guiEditor = (function() {
     };
     
     var save = function() {
-    
-        console.log('init save in guiEditor.js');
+      console.log('init save in guiEditor.js');
         
         if(changedArray.length === 0)
             return;
@@ -554,7 +566,9 @@ var guiEditor = (function() {
     return {
         init: init,
         loadControlEvent: loadControlEvent,
-        setChanged: setChanged
+        setChanged: setChanged,
+        changedArray: changedArray,
+        controlEvent: controlEvent
     }
     
 })();

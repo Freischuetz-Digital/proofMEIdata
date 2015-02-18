@@ -1,5 +1,6 @@
 var registerNoteListeners = function() {
-    
+    console.log('init ediRovio.js : registerNoteListeners');
+
     var currentNote = null;
     
     var highlight = '#ff3333';

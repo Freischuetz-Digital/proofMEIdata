@@ -14,7 +14,7 @@ let $id := request:get-parameter('id', '')
 
 let $elem := if($type eq 'slur')
              then(
-                <slur xmlns="http://www.music-encoding.org/ns/mei" xml:id="{$id}" sameas="" startid="" endid="" curvedir="above"/>
+                <slur xmlns="http://www.music-encoding.org/ns/mei" xml:id="{$id}" sameas="" startid="" endid="" staff="" curvedir="above"/>
              )
              else(
              
