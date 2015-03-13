@@ -1,12 +1,3 @@
-/*
- * controlevents.js
- * 
- * - load controlEvents for page from database
- * - add new events
- * - append HTML to controlEvent list
- * - select controlEevent from controlEvent list
- * 
- */
 var controlevents = (function(){
     
     var init = function() {
@@ -23,6 +14,7 @@ var controlevents = (function(){
         });
     };
     
+    var controlEvents = [];
     var currentEvent = null;
     var currentSourcePath = null;
     
@@ -40,7 +32,11 @@ var controlevents = (function(){
             success: function(result) {
                 var response = result || '';
                 var json = jQuery.parseJSON(response);
-                
+                console.log('json');
+                console.log(json);
+                controlEvents = json;
+                console.log('controlEvents')
+                console.log(controlEvents);
                 currentSourcePath = sourcePath;
                 
                 $('#slurDiv tr.slurRow').off();
@@ -49,7 +45,7 @@ var controlevents = (function(){
                 
                 //todo: andere ce implementieren
                 $.each(json.slurs, function(index, slur) {
-                   loadSlur(slur); 
+                   loadSlur(slur,false,index); 
                 });
                 
                 loadHairpins(json.hairpins);
@@ -59,6 +55,36 @@ var controlevents = (function(){
                 
             }
         });
+    };
+    
+    var getControlEvent = function(){
+      return (controlEvent != null) ? controlEvent : 'nüscht';
+    };
+    
+    var getControlEvents = function(){
+      return controlEvents;
+    };
+    
+    var updateControlEventXML = function(id, code){
+      $.map(controlEvents, function(item,index){
+        if(item.id === id){
+        console.log( controlEvents[index]);
+          getControlEvents[index].xml = code;
+        console.log( controlEvents[index]);
+
+        }
+      });
+      //console.log($.inArray(json,controlEvents));
+      //return (controlEvent != null) ? controlEvent : 'nüscht';
+    };
+    
+    var updateControlEventStart = function(id, vals){
+      $.grep(controlEvents, function(item,index){
+        if(item.id === id){
+        console.log( controlEvents[index]);
+          getControlEvents[index].startIDs = vals;
+        }
+      });
     };
     
     var addNewEvent = function(type,sourcePath) {
@@ -92,21 +118,22 @@ var controlevents = (function(){
     var setCurrentEvent = function(json) {
         
         console.log('current event is: ' + json.id + ' (' + json.type + ')');
+        controlEvent = json;
         
         if(['slur','hairpin','dynam','dir'].indexOf(json.type) == -1) {
             console.log('trying to load unknown control event (xml:id: ' + json.id + '/ type: ' + json.type + ')')
         }
         
         $.each(controleventChangeListeners, function(index, listener) {
-            listener(currentSourcePath, json.id);
+            listener(json,currentSourcePath);
         });
         
         guiEditor.loadControlEvent(json,currentSourcePath);
-        
+        editor.setEditorValue(json.xml);
     };
     
     //doc: ein element in die Liste laden
-    var loadSlur = function(slur, created) {
+    var loadSlur = function(slur, created, index) {
         
         var placement = '';
         if(slur.tstamp === '' && slur.startIDs.length === 1 && slur.endIDs.length === 1)
@@ -125,16 +152,16 @@ var controlevents = (function(){
         tmpl.children('.staff').text(slur.staff);
         
         if(slur.startIDs.length >= 1 && slur.startIDs[0].length >= 1)
-            tmpl.children('.startLabel').text(slur.startIDs[0].substr(0,5));
+            tmpl.children('.startLabel').text(slur.startIDs[0]);
         if(slur.endIDs.length >= 1 && slur.endIDs[0].length >= 1)
-            tmpl.children('.endLabel').text(slur.endIDs[0].substr(0,5));
+            tmpl.children('.endLabel').text(slur.endIDs[0]);
         
         tmpl.children('.curvedir').text(slur.curvedir);
         
         tmpl.children('.type').children('.cePlacement').addClass(placement);
         
         tmpl.on('click',function(){
-            setCurrentEvent(slur);
+            setCurrentEvent(controlevents.getControlEvents().slurs[index]);
         });
         /*
         tmpl.on('mouseout',function(){
@@ -282,6 +309,10 @@ var controlevents = (function(){
         addControleventChangeListener: addControleventChangeListener,
         removeControlEvent: removeControlEvent,
         highlightRow: highlightRow,
-        removeHighlight: removeHighlight
+        removeHighlight: removeHighlight,
+        getControlEvent: getControlEvent,
+        getControlEvents: getControlEvents,
+        updateControlEventXML: updateControlEventXML,
+        updateControlEventStart: updateControlEventStart
     }
 })();

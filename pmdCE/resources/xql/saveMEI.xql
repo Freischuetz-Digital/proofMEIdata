@@ -52,4 +52,4 @@ let $change :=
         $changeElem
 
 return
-    <result>{$change}</result>
+    <result>{$xml}</result>

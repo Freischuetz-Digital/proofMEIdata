@@ -26,7 +26,6 @@ var guiEditor = (function() {
     
     var placement;      // --> obvious | ambiguous | multiResolve
     
-    //array of changed control events
     var changedArray = new Array();
     
     //todo: selection.addSelectionChangeListener
@@ -56,6 +55,10 @@ var guiEditor = (function() {
             storeControlEvent();
             unloadControlEvent();
         }
+    };
+    
+    var getControlEvent = function() {
+        return (controlEvent != null) ? controlEvent : 'nüscht';
     };
     
     var loadControlEvent = function(json,path) {
@@ -98,12 +101,16 @@ var guiEditor = (function() {
         $('#' + controlEvent.type + 'Placement .cePlacement').addClass(placement);
         
         var startStaffFunc = function() {
+            console.log('init guiEditor.js : startStaffFunc');
             grid.showAllStaves(setStartStaff);    
         };
         var endStaffFunc = function() {
+            console.log('init guiEditor.js : endStaffFunc');
             grid.showAllStaves(setEndStaff);    
         };
-        
+          
+          //onclick listener for startStaff end endStaff
+        //TODO rework to more expressive ID --> index.html
         $('#' + controlEvent.type + 'Tools .glyphicon-chevron-right').on('click',startStaffFunc);
         $('#' + controlEvent.type + 'Tools .glyphicon-chevron-left').on('click',endStaffFunc);
         
@@ -153,6 +160,7 @@ var guiEditor = (function() {
         
         
         if(controlEvent.curvedir != undefined) {
+            console.log('controlEvent curvedir stuff');
             if(controlEvent.curvedir === 'above') 
                 $('#' + controlEvent.type + 'Curvedir').val('above');
             else if(controlEvent.curvedir === 'below') 
@@ -173,10 +181,19 @@ var guiEditor = (function() {
     };
     
     var setStartStaff = function(elem) {
+        console.log('init guiEditor.js : setStartStaff');
+        console.log(elem.data[0].n);
         grid.unhighlight();
         
         var staffID = $(this).attr('title');
+        console.log('staffID: ' + staffID);
+        
         controlEvent.startStaffID = staffID;
+        controlEvent.staff = elem.data[0].n;
+        editor.setAttribute('staff', elem.data[0].n);
+
+        
+        console.log(controlEvent);
         
         getRendering('start');
         setStartEndListeners();
@@ -184,6 +201,7 @@ var guiEditor = (function() {
     };
     
     var setEndStaff = function(elem) {
+        console.log('init guiEditor.js : setEndStaff');
         grid.unhighlight();
         
         var staffID = $(this).attr('title');
@@ -243,7 +261,7 @@ var guiEditor = (function() {
     //TODO: was passieren muss, ist dass für jedes Objekt nur ein Change im changedArray vorkommt, dass also bestehende Changes ggf. überschrieben werden
     //also pürfen, ob es im Array schon ein objekt mit gleicher ID gibt und dieses ggf. löschen
     var storeControlEvent = function() {
-    
+      console.log('guiEditor:storeEvent');
         if(controlEvent === null)
             return;
         
@@ -251,9 +269,12 @@ var guiEditor = (function() {
             var obj = new Object();
             
             obj.id = controlEvent.id;
-            obj.sourcePath = sourcePath;
+            obj.sourcePath = controlEvent.docUri;
             obj.operation = (typeof $('#tableRow_' + obj.id).attr('data-new') != 'undefined'?'create':'change');
             obj.code = editor.getEditorValue();
+            
+            controlevents.updateControlEventXML(obj.id,obj.code);
+
             
             var pos = -1;
             for(var i = 0; i< changedArray.length;i++) {
@@ -265,6 +286,7 @@ var guiEditor = (function() {
                 changedArray.push(obj);
             else
                 changedArray[pos] = obj;
+                
         }
     };
     
@@ -364,6 +386,8 @@ var guiEditor = (function() {
                 
                 //todo: rewrite editor with choices, or, in case of just one startid, with only this.
             }
+            
+            controlevents.updateControlEventStart(controlEvent.id, controlEvent.startIDs);
             
             if(controlEvent.startIDs.length < 1)
                 alert('something went terribly wrong – currentStarts in guiEditor.js is empty!!!');
@@ -518,8 +542,7 @@ var guiEditor = (function() {
     };
     
     var save = function() {
-    
-        console.log('init save in guiEditor.js');
+      console.log('init save in guiEditor.js');
         
         if(changedArray.length === 0)
             return;
@@ -554,7 +577,9 @@ var guiEditor = (function() {
     return {
         init: init,
         loadControlEvent: loadControlEvent,
-        setChanged: setChanged
+        setChanged: setChanged,
+        changedArray: changedArray,
+        getControlEvent: getControlEvent
     }
     
 })();
