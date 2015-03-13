@@ -14,10 +14,13 @@ var editor = (function() {
     var changed = false;
     
     var init = function() {
+        
         $('#validateButton').addClass('disabled');
         $('#saveButton').addClass('disabled');
         
-        
+        $('#editToggle').on('change',function(){
+            toggleLock(!arguments[0].target.checked);
+        });
 		$('#validateButton').on("click", validate);
 		$('#saveButton').on("click", save);
 		
@@ -31,6 +34,8 @@ var editor = (function() {
 		addValidListener(changeSaveButtonState);
 		
 		createEditor();
+        $('#editToggle').prop('checked', !editor.getReadOnly()).change();
+
     };
     
     var createEditor = function() {
@@ -43,6 +48,13 @@ var editor = (function() {
         editor.getSession().on('change', onChange);
         
         editor.selection.on('changeCursor', onChangeCursor);
+    };
+    
+    var toggleLock = function(boolean){
+        //var buttonStatus = ;
+        //var readOnlyStatus = editor.getReadOnly();
+        //(readOnlyStatus === true) ? editor.setReadOnly(false) : editor.setReadOnly(true);
+        editor.setReadOnly(boolean);
     };
     
     var onChange = function() {
@@ -189,7 +201,6 @@ var editor = (function() {
     };
     
     var save = function() {
-        console.log('init save in xmlEditor.js');
     
         if($('#saveButton').hasClass('disabled')) return;
     
@@ -543,6 +554,7 @@ var editor = (function() {
         setAttribute: setAttribute,
         wrapWithChoice: wrapWithChoice,
         setBlank: setBlank,
-        getTemplate: getTemplate
+        getTemplate: getTemplate,
+        toggleLock: toggleLock
     };
 })();
