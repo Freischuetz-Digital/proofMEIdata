@@ -30,6 +30,7 @@ declare variable $snippet := <controlEvents>{
 
                              }</controlEvents>;
 
+declare variable $surface := $doc//id($path);
 
 declare variable $slurs := $snippet//(mei:slur[not(./parent::mei:*/parent::mei:choice)]|mei:choice[.//mei:slur]);
 declare variable $hairpins := $snippet//mei:hairpin;
@@ -58,7 +59,7 @@ declare function local:jsonifySlurs($slurs) {
                     let $event := $doc/id(substring($startID,2))
                     let $staff := $event/ancestor::mei:staff
                     let $layer :=  $event/ancestor::mei:layer
-                    let $predecessors := $layer//mei:*[local-name() = ('note','chord') and not(parent::mei:chord) and following::mei:*[@xml:id = $event/@xml:id]]
+(:                    let $predecessors := $layer//mei:*[local-name() = ('note','chord') and not(parent::mei:chord) and following::mei:*[@xml:id = $event/@xml:id]]:)
                     
                     let $endEvent := $doc/id(substring($endID,2))
                     (:let $endPageName := concat($doc/mei:mei/@xml:id,'.xml'):)
@@ -66,7 +67,7 @@ declare function local:jsonifySlurs($slurs) {
                     let $endStaff := $endEvent/ancestor::mei:staff
                     let $endLayer :=  $endEvent/ancestor::mei:layer
                     let $endMeasure := $endLayer/ancestor::mei:measure
-                    let $endPredecessors := $endLayer//mei:*[local-name() = ('note','chord') and not(parent::mei:chord) and following::mei:*[@xml:id = $endEvent/@xml:id]]
+(:                    let $endPredecessors := $endLayer//mei:*[local-name() = ('note','chord') and not(parent::mei:chord) and following::mei:*[@xml:id = $endEvent/@xml:id]]:)
                     
                     let $curvedir := $elem//@curvedir[1]
                     let $staffText := $elem//@staff[1]
@@ -95,7 +96,7 @@ declare function local:jsonifySlurs($slurs) {
                             '"endStaffID":"',$endStaff/@xml:id,'",',
                             (:'"endPageName":"',$endPageName,'",',:)
                             '"placement":"',$placement,'",',
-                            '"xml":"',replace(replace(serialize($elem),'"','&#x0027;'),'\n','\\n'),'"',(:serialize(replace(replace(serialize($elem),'"','&amp;#x0027;'),'\n','')),'"',:)
+                            '"xml":"',replace(replace(serialize($elem),'"','\\"'),'\n','\\n'),'"',(:serialize(replace(replace(serialize($elem),'"','&amp;#x0027;'),'\n','')),'"',:)
                             '}')
                     
                         (:concat('{"id":"',$id,'",',
