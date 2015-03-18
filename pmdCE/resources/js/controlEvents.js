@@ -287,9 +287,9 @@ var controlevents = (function(){
         console.log('removedFromList');
     };
     
-    var highlightRow = function(eventID) {
+    var highlightRow = function(eventID,style) {
         removeHighlight();
-        $('#tableRow_' + eventID).addClass('info');
+        $('#tableRow_' + eventID).addClass(style);
     };
     
     var removeHighlight = function() {
