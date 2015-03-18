@@ -273,7 +273,16 @@ var facsimile = (function() {
 		$('#facsDown').on("click", moveDown);
 		$('#facsRight').on("click", moveRight);	
     
-        selection.addSelectionChangeListener(onSelectionChanged);
+    selection.addSelectionChangeListener(onSelectionChanged);
+      
+      $('#facsimileArea img').load(function(){
+          imageLoaded();
+        });
+    };
+    
+    var imageLoaded = function(){
+     grid.drawFacsimileLabels();
+     grid.setDimensions();
     };
 
     var zoomOut = function() {
