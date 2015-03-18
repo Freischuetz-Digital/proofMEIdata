@@ -273,7 +273,9 @@ var guiEditor = (function() {
             obj.operation = (typeof $('#tableRow_' + obj.id).attr('data-new') != 'undefined'?'create':'change');
             obj.code = editor.getEditorValue();
             
-            controlevents.updateControlEventXML(obj.id,obj.code);
+            controlevents.updateControlEventProperty(obj.id,controlEvent.type,'xml',obj.code);
+            controlevents.updateControlEventProperty(obj.id,controlEvent.type,'operation',obj.operation);
+            controlevents.highlightRow(controlEvent.id, 'danger');
 
             
             var pos = -1;
