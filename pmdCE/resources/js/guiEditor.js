@@ -76,7 +76,7 @@ var guiEditor = (function() {
         startPrefix = controlEvent.type + 'Start___';
         endPrefix = controlEvent.type + 'End___';
         
-        controlevents.highlightRow(controlEvent.id);
+        controlevents.highlightRow(json.id, 'info');
         
         //todo: auf andere CE anpassen
         $('#slurTstamp').val(controlEvent.tstamp);
