@@ -58,31 +58,23 @@ var controlevents = (function(){
     };
     
     var getControlEvent = function(){
-      return (controlEvent != null) ? controlEvent : 'nüscht';
+      return (controlEvent !== null) ? controlEvent : 'nüscht';
     };
     
     var getControlEvents = function(){
       return controlEvents;
     };
     
-    var updateControlEventXML = function(id, code){
-      $.map(controlEvents, function(item,index){
+    var updateControlEventProperty = function(id, type, property, val){
+      console.log('controlevents.updateControlEventProperty start');
+      console.log(property);
+      console.log(val);
+      $.map(getControlEvents()[type+'s'], function(item,index){
         if(item.id === id){
-        console.log( controlEvents[index]);
-          getControlEvents[index].xml = code;
-        console.log( controlEvents[index]);
+        //console.log(getControlEvents()[type+'s'][index]);
+          getControlEvents()[type+'s'][index][property] = val;
+        //console.log(getControlEvents()[type+'s'][index]);
 
-        }
-      });
-      //console.log($.inArray(json,controlEvents));
-      //return (controlEvent != null) ? controlEvent : 'nüscht';
-    };
-    
-    var updateControlEventStart = function(id, vals){
-      $.grep(controlEvents, function(item,index){
-        if(item.id === id){
-        console.log( controlEvents[index]);
-          getControlEvents[index].startIDs = vals;
         }
       });
     };
@@ -312,7 +304,6 @@ var controlevents = (function(){
         removeHighlight: removeHighlight,
         getControlEvent: getControlEvent,
         getControlEvents: getControlEvents,
-        updateControlEventXML: updateControlEventXML,
-        updateControlEventStart: updateControlEventStart
+        updateControlEventProperty: updateControlEventProperty
     }
 })();
