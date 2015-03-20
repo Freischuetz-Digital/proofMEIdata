@@ -54,7 +54,7 @@ var controlevents = (function(){
                 
                 //todo: andere ce implementieren
                 $.each(json.slurs, function(index, slur) {
-                   loadSlur(slur,false,index); 
+                   loadSlur(slur); 
                 });
                 
                 loadHairpins(json.hairpins);
@@ -119,22 +119,21 @@ var controlevents = (function(){
     var setCurrentEvent = function(json) {
         
         console.log('current event is: ' + json.id + ' (' + json.type + ')');
-        controlEvent = json;
         
         if(['slur','hairpin','dynam','dir'].indexOf(json.type) == -1) {
             console.log('trying to load unknown control event (xml:id: ' + json.id + '/ type: ' + json.type + ')')
         }
         
         $.each(controleventChangeListeners, function(index, listener) {
-            listener(json,currentSourcePath);
+            listener(currentSourcePath, json.id);
         });
         
         guiEditor.loadControlEvent(json,currentSourcePath);
-        editor.setEditorValue(json.xml);
+        
     };
     
     //doc: ein element in die Liste laden
-    var loadSlur = function(slur, created, index) {
+    var loadSlur = function(slur, created) {
         
         var placement = '';
         if(slur.tstamp === '' && slur.startIDs.length === 1 && slur.endIDs.length === 1)
@@ -162,7 +161,7 @@ var controlevents = (function(){
         tmpl.children('.type').children('.cePlacement').addClass(placement);
         
         tmpl.on('click',function(){
-            setCurrentEvent(controlevents.getControlEvents().slurs[index]);
+            setCurrentEvent(slur);
         });
         /*
         tmpl.on('mouseout',function(){
