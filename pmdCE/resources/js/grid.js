@@ -1,5 +1,12 @@
+/*
+ * grid.js
+ * 
+ * Is responsible for superimposing staff and measure numbers, and sllur highlighting on the facsimile image
+ */
+
 var grid = (function() {
     
+    var loaded = false;
     var zones = null;
     var page = null;
     
@@ -18,6 +25,10 @@ var grid = (function() {
     
     //todo: bei resize der Seite aufrufen
     var setDimensions = function() {
+        
+        if(loaded !== true){
+          return;
+        }
         
         var width = $('#facsimileArea img').width();
         var height = $('#facsimileArea img').height();
@@ -51,8 +62,9 @@ var grid = (function() {
                 $.each(gridChangeListeners, function(index, listener) {
                     listener();
                 });
-    
-                drawFacsimileLabels();
+                
+                loaded = true;
+                
             }
         });
         
@@ -74,6 +86,12 @@ var grid = (function() {
     };
     
     var drawFacsimileLabels = function() {
+        console.log('start grid.drawFacsimileLabels');
+        
+        if(loaded !== true){
+          setTimeout(drawFacsimileLabels, 50);
+          return;
+        }
         
         var measureZones = $.grep(zones, function(elem,index) {
             return elem.type === 'measure';
@@ -325,7 +343,8 @@ var grid = (function() {
         drawSlur: drawSlur,
         setDimensions: setDimensions,
         highlightRect: highlightRect,
-        showAllStaves: showAllStaves
+        showAllStaves: showAllStaves,
+        drawFacsimileLabels: drawFacsimileLabels
     };
     
 })();

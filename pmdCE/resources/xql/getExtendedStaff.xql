@@ -11,16 +11,16 @@ declare namespace transform="http://exist-db.org/xquery/transform";
 
 declare option exist:serialize "method=xml media-type=text/plain omit-xml-declaration=yes indent=yes";
 
-let $path := concat($freidi-pmd:ce-data,request:get-parameter('path', ''))
+let $path := request:get-parameter('path', '')
 let $staffID := request:get-parameter('staffID', '')
 let $id_prefix := request:get-parameter('id_prefix', '')
 let $endPageName := request:get-parameter('endPageName','')
-
+let $docPath := concat($freidi-pmd:ce-data, substring-before($path,'_'),'/', substring-before($staffID,'_measure'),'.xml')
 let $pageName := tokenize($path,'/')[last()]
-let $endPagePath := replace($path,$pageName,$endPageName)
+(:  :let $endPagePath := replace($path,$pageName,$endPageName):)
 let $xslbase := concat(replace(system:get-module-load-path(), 'embedded-eXist-server', ''), '/../xsl/')
 
-let $doc := if($id_prefix = 'slurEnd___' and $pageName != $endPageName)then(doc($endPagePath))else(doc($path))
+let $doc := doc($docPath)
 
 let $snippet := transform:transform($doc, doc($xslbase || 'stripPage2staff.xsl'), <parameters><param name="staffID" value="{$staffID}"/><param name="id_prefix" value="{$id_prefix}"/><param name="path" value="{$path}"/><param name="endPageName" value="{$endPageName}"/></parameters>)
 let $preparedSnippet := transform:transform($snippet, doc($xslbase || 'prepareRendering.xsl'), <parameters></parameters>)

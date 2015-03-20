@@ -1,3 +1,12 @@
+/*
+ * controlevents.js
+ * 
+ * - load controlEvents for page from database
+ * - add new events
+ * - append HTML to controlEvent list
+ * - select controlEevent from controlEvent list
+ * 
+ */
 var controlevents = (function(){
     
     var init = function() {
@@ -14,6 +23,7 @@ var controlevents = (function(){
         });
     };
     
+    var controlEvents = [];
     var currentEvent = null;
     var currentSourcePath = null;
     
@@ -31,7 +41,11 @@ var controlevents = (function(){
             success: function(result) {
                 var response = result || '';
                 var json = jQuery.parseJSON(response);
-                
+                console.log('json');
+                console.log(json);
+                controlEvents = json;
+                console.log('controlEvents')
+                console.log(controlEvents);
                 currentSourcePath = sourcePath;
                 
                 $('#slurDiv tr.slurRow').off();
@@ -50,6 +64,28 @@ var controlevents = (function(){
                 
             }
         });
+    };
+    
+    var getControlEvent = function(){
+      return (controlEvent !== null) ? controlEvent : 'nüscht';
+    };
+    
+    var getControlEvents = function(){
+      return controlEvents;
+    };
+    
+    var updateControlEventProperty = function(id, type, property, val){
+      console.log('controlevents.updateControlEventProperty start');
+      console.log(property);
+      console.log(val);
+      $.map(getControlEvents()[type+'s'], function(item,index){
+        if(item.id === id){
+        //console.log(getControlEvents()[type+'s'][index]);
+          getControlEvents()[type+'s'][index][property] = val;
+        //console.log(getControlEvents()[type+'s'][index]);
+
+        }
+      });
     };
     
     var addNewEvent = function(type,sourcePath) {
@@ -116,9 +152,9 @@ var controlevents = (function(){
         tmpl.children('.staff').text(slur.staff);
         
         if(slur.startIDs.length >= 1 && slur.startIDs[0].length >= 1)
-            tmpl.children('.startLabel').text(slur.startIDs[0].substr(0,5));
+            tmpl.children('.startLabel').text(slur.startIDs[0]);
         if(slur.endIDs.length >= 1 && slur.endIDs[0].length >= 1)
-            tmpl.children('.endLabel').text(slur.endIDs[0].substr(0,5));
+            tmpl.children('.endLabel').text(slur.endIDs[0]);
         
         tmpl.children('.curvedir').text(slur.curvedir);
         
@@ -259,9 +295,9 @@ var controlevents = (function(){
         console.log('removedFromList');
     };
     
-    var highlightRow = function(eventID) {
+    var highlightRow = function(eventID,style) {
         removeHighlight();
-        $('#tableRow_' + eventID).addClass('info');
+        $('#tableRow_' + eventID).addClass(style);
     };
     
     var removeHighlight = function() {
@@ -273,6 +309,9 @@ var controlevents = (function(){
         addControleventChangeListener: addControleventChangeListener,
         removeControlEvent: removeControlEvent,
         highlightRow: highlightRow,
-        removeHighlight: removeHighlight
+        removeHighlight: removeHighlight,
+        getControlEvent: getControlEvent,
+        getControlEvents: getControlEvents,
+        updateControlEventProperty: updateControlEventProperty
     }
 })();
