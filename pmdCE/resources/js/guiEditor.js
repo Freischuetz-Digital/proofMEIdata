@@ -189,15 +189,15 @@ var guiEditor = (function() {
     
     var setStartStaff = function(elem) {
         console.log('init guiEditor.js : setStartStaff');
-        console.log(elem.data[0].n);
+        console.log(elem.data.n);
         grid.unhighlight();
         
         var staffID = $(this).attr('title');
         console.log('staffID: ' + staffID);
         
         controlEvent.startStaffID = staffID;
-        controlEvent.staff = elem.data[0].n;
-        editor.setAttribute('staff', elem.data[0].n);
+        controlEvent.staff = elem.data.n;
+        editor.setAttribute('staff', elem.data.n);
 
         
         
