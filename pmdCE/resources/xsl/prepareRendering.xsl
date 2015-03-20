@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:math="http://www.w3.org/2005/xpath-functions/math" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" exclude-result-prefixes="xs math xd" version="3.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:math="http://www.w3.org/2005/xpath-functions/math" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" exclude-result-prefixes="xs math xd" version="3.0">
     <xd:doc scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -113,6 +113,26 @@
             <xsl:attribute name="right" select="'single'"/>
             <xsl:apply-templates select="node() | @*" mode="#current"/>
         </xsl:copy>
+    </xsl:template>
+  
+  <!-- ignore cpMarks -->
+    <xsl:template match="mei:cpMark"/>
+  
+  <!-- sic -->
+  <!-- abbr -->
+  <!-- expan -->
+    <xsl:template match="mei:choice" mode="#all">
+        <xsl:choose>
+            <xsl:when test="mei:sic and mei:corr">
+                <xsl:apply-templates select="mei:sic/*" mode="#current"/>
+            </xsl:when>
+            <xsl:when test="mei:abbr and mei:expan">
+                <xsl:apply-templates select="mei:expan/*" mode="#current"/>
+            </xsl:when>
+            <xsl:when test="mei:orig and mei:reg">
+                <xsl:apply-templates select="mei:reg/*" mode="#current"/>
+            </xsl:when>
+        </xsl:choose>
     </xsl:template>
     
     <!-- generic copy template -->
