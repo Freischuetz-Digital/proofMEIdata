@@ -51,23 +51,34 @@ var editor = (function() {
         editor.selection.on('changeCursor', onChangeCursor);
     };
     
-    var toggleLock = function(boolean){
-        editor.setReadOnly(boolean);
+    var toggleLock = function(booleanVal){
+        console.log('xmlEditor.toggleLock: ' + booleanVal);
+        //var buttonStatus = ;
+        //var readOnlyStatus = editor.getReadOnly();
+        //(readOnlyStatus === true) ? editor.setReadOnly(false) : editor.setReadOnly(true);
+        editor.setReadOnly(booleanVal);
     };
     
     var onChange = function() {
-        
-        if(isSettingContent) return;
-        
         console.log('editor.onChange()');
         
+        if(isSettingContent === true){
+            console.log('return isSettingContent');
+           return
+        }
+        
         changed = true;
+        console.log('set changed to: ' + changed);
         setDirty();
 
         lastChange = new Date().getTime();
         setTimeout(checkWellFormedness, 1020);
+
+        
         guiEditor.setChanged();
-        controlevents.updateControlEventXML(controlEvent.id, editor.getValue());
+        console.log('called guiEditor.setChanged()');
+        //guiEditor.storeControlEvent();
+        //controlevents.updateControlEventProperty(controlEvent.id,contorlEvent.type,'xml',editor.getValue());
     };
     
     var onChangeCursor = function(event, session) {
@@ -119,9 +130,9 @@ var editor = (function() {
                 isSettingContent = false;
             }
         });*/
-        isSettingContent = true;
-        editor.setValue(controlEvent.xml, -1);
-        isSettingContent = false;
+        /*isSettingContent = true;
+        setEditorValue(guiEditor.getControlEvent().xml);
+        isSettingContent = false;*/
         
     };
     
@@ -296,7 +307,9 @@ var editor = (function() {
     };
     
     var setEditorValue = function(xmlString) {
+        //isSettingContent = true;
         return editor.setValue(xmlString, -1);
+        //isSettingContent = false;
     };
     
     var addWellFormedListener = function(listener) {
@@ -485,6 +498,10 @@ var editor = (function() {
     
  /**JK ab hier**/   
     
+    var setIsSettingContent = function(booleanVal){
+      isSettingContent = booleanVal;
+    };
+    
     var setAttribute = function(attribute, value) {
         editor.clearSelection();
         
@@ -531,7 +548,6 @@ var editor = (function() {
     var setBlank = function() {
         isSettingContent = true;
         editor.setValue('', -1);
-        isSettingContent = false;
     };
     
     var getTemplate = function(type,id) {
@@ -563,6 +579,7 @@ var editor = (function() {
         setBlank: setBlank,
         getTemplate: getTemplate,
         toggleLock: toggleLock,
-        setEditorValue: setEditorValue
+        setEditorValue: setEditorValue,
+        setIsSettingContent: setIsSettingContent
     };
 })();

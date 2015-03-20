@@ -26,6 +26,7 @@ var guiEditor = (function() {
     
     var placement;      // --> obvious | ambiguous | multiResolve
     
+    //array of changed control events
     var changedArray = new Array();
     
     //todo: selection.addSelectionChangeListener
@@ -34,6 +35,7 @@ var guiEditor = (function() {
         
         $('#saveButton').on('click',function(event){
             save();
+            changedArray = [];
         });
         
         $('#removeModal').on('show.bs.modal', function (e) {
@@ -63,7 +65,7 @@ var guiEditor = (function() {
     
     var loadControlEvent = function(json,path) {
         
-        if(controlEvent != null) {
+        if(controlEvent !== null) {
             storeControlEvent();
             unloadControlEvent();
         }
@@ -77,6 +79,11 @@ var guiEditor = (function() {
         endPrefix = controlEvent.type + 'End___';
         
         controlevents.highlightRow(json.id, 'info');
+        
+        editor.setBlank();
+        editor.setIsSettingContent(true);
+        editor.setEditorValue(controlEvent.xml);
+        editor.setIsSettingContent(false);
         
         //todo: auf andere CE anpassen
         $('#slurTstamp').val(controlEvent.tstamp);
@@ -193,7 +200,6 @@ var guiEditor = (function() {
         editor.setAttribute('staff', elem.data[0].n);
 
         
-        console.log(controlEvent);
         
         getRendering('start');
         setStartEndListeners();
@@ -273,11 +279,6 @@ var guiEditor = (function() {
             obj.operation = (typeof $('#tableRow_' + obj.id).attr('data-new') != 'undefined'?'create':'change');
             obj.code = editor.getEditorValue();
             
-            controlevents.updateControlEventProperty(obj.id,controlEvent.type,'xml',obj.code);
-            controlevents.updateControlEventProperty(obj.id,controlEvent.type,'operation',obj.operation);
-            controlevents.highlightRow(controlEvent.id, 'danger');
-
-            
             var pos = -1;
             for(var i = 0; i< changedArray.length;i++) {
                 if(changedArray[i].id === obj.id)
@@ -288,13 +289,14 @@ var guiEditor = (function() {
                 changedArray.push(obj);
             else
                 changedArray[pos] = obj;
-                
         }
     };
     
     var setChanged = function() {
+        console.log('guiEditor.setChanged '+ controlEvent.id);
         controlEvent.changed = true;
-        storeControlEvent();
+        guiEditor.storeControlEvent();
+        controlevents.highlightRow(controlEvent.id,'danger');
     };
     
     
@@ -388,8 +390,6 @@ var guiEditor = (function() {
                 
                 //todo: rewrite editor with choices, or, in case of just one startid, with only this.
             }
-            
-            controlevents.updateControlEventStart(controlEvent.id, controlEvent.startIDs);
             
             if(controlEvent.startIDs.length < 1)
                 alert('something went terribly wrong – currentStarts in guiEditor.js is empty!!!');
@@ -570,8 +570,8 @@ var guiEditor = (function() {
             contentType:"application/xml; charset=utf-8",
             dataType:"xml",
             success: function(){
-                console.log(arguments);
-                changedArray = new Array();
+                console.log('guiEditor.save success');
+                guiEditor.changedArray = [];
             }
         });
     };
@@ -581,7 +581,8 @@ var guiEditor = (function() {
         loadControlEvent: loadControlEvent,
         setChanged: setChanged,
         changedArray: changedArray,
-        getControlEvent: getControlEvent
+        getControlEvent: getControlEvent,
+        storeControlEvent: storeControlEvent
     }
     
 })();
