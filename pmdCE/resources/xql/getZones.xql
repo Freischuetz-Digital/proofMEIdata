@@ -1,5 +1,7 @@
 xquery version "3.0";
 
+import module namespace freidi-pmd="http://www.freischuetz-digital.de/proofMEIdata" at "../../../modules/app.xql";
+
 declare namespace request="http://exist-db.org/xquery/request";
 declare namespace mei="http://www.music-encoding.org/ns/mei";
 declare namespace tei="http://www.tei-c.org/ns/1.0";
@@ -9,9 +11,9 @@ declare namespace transform="http://exist-db.org/xquery/transform";
 
 declare option exist:serialize "method=xhtml media-type=text/html omit-xml-declaration=yes indent=yes";
 
-declare function local:getJson($doc,$types) {
+declare function local:getJson($surface,$types) {
 
-    let $page := ($doc//mei:surface)[1]
+    let $page := $surface
     
     let $pageJson := concat('"page":{',
                          '"id":"',$page/@xml:id,'",',
@@ -22,12 +24,12 @@ declare function local:getJson($doc,$types) {
                      )
 
     let $zones := if('all' = $types)
-                  then($doc//mei:zone)
-                  else($doc//mei:zone[@type = $types])
+                  then($page//mei:zone)
+                  else($page//mei:zone[@type = $types])
                   
     let $zonesJson := for $zone in $zones
                       let $ref := $zone/substring(@data,2)
-                      let $elem := $doc/id($ref)
+                      let $elem := $page/id($ref)
                       return 
                           concat('{',
                               '"id":"',$zone/@xml:id,'",',
@@ -51,7 +53,9 @@ declare function local:getJson($doc,$types) {
 let $path := request:get-parameter('path', '')
 let $typeString := request:get-parameter('types', 'all')
 
-let $doc := doc('/db/apps/controlevents-data/' || $path)
+(:let $doc := doc('/db/apps/controlevents-data/' || $path):)
+let $doc := collection($freidi-pmd:ce-data)//mei:surface[@xml:id = $path]
+
 let $types := tokenize($typeString,',')
 
 let $json := local:getJson($doc,$types)

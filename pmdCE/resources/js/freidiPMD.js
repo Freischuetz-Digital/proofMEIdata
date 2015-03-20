@@ -247,7 +247,7 @@ var selection = (function() {
         if(sourceIndex === -1 || mdivIndex === -1 || pageIndex === -1)
             return;
         
-        var sourcePath = navigation[sourceIndex].mdivs[mdivIndex].pages[pageIndex].path;
+        var sourcePath = navigation[sourceIndex].mdivs[mdivIndex].pages[pageIndex].id;
         var sourceSigle = navigation[sourceIndex].sigle;
         var mdivId = navigation[sourceIndex].mdivs[mdivIndex].id;
         
@@ -279,7 +279,16 @@ var facsimile = (function() {
 		$('#facsDown').on("click", moveDown);
 		$('#facsRight').on("click", moveRight);	
     
-        selection.addSelectionChangeListener(onSelectionChanged);
+    selection.addSelectionChangeListener(onSelectionChanged);
+      
+      $('#facsimileArea img').load(function(){
+          imageLoaded();
+        });
+    };
+    
+    var imageLoaded = function(){
+     grid.drawFacsimileLabels();
+     grid.setDimensions();
     };
 
     var zoomOut = function() {

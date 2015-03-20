@@ -8,9 +8,8 @@ declare option exist:serialize "method=text media-type=text/plain omit-xml-decla
 
 let $path := request:get-parameter('path', '')
 
-let $doc := doc('/db/apps/controlevents-data/' || $path)
+let $surface := collection('/db/apps/controlevents-data/')//mei:surface[@xml:id = $path]
              
-let $surface := $doc//mei:surface[1]
 let $graphic := $surface/mei:graphic[1]
 
 let $path := $graphic/@target

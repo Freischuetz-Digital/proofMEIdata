@@ -8,8 +8,8 @@ declare namespace tei="http://www.tei-c.org/ns/1.0";
 declare namespace xmldb="http://exist-db.org/xquery/xmldb";
 declare namespace system="http://exist-db.org/xquery/system";
 declare namespace transform="http://exist-db.org/xquery/transform";
-
-(:  :declare option exist:serialize "method=xhtml media-type=text/html omit-xml-declaration=yes indent=yes";:)
+(: 
+declare option exist:serialize "method=xhtml media-type=text/html omit-xml-declaration=yes indent=yes";:)
 declare option exist:serialize "method=text media-type=text/plain omit-xml-declaration=yes";
 
 
@@ -19,12 +19,23 @@ declare variable $staffN := request:get-parameter('staff', '');
 declare variable $resourceName := tokenize($path,'/')[last()];
 declare variable $parentCollectionURI := substring-before($path, $resourceName);
 
-declare variable $doc := doc($freidi-pmd:ce-data || $path);
+declare variable $doc := collection($freidi-pmd:ce-data)//mei:surface[@xml:id = $path]/root();
 
-declare variable $slurs := $doc//(mei:slur[not(./parent::mei:*/parent::mei:choice)]|mei:choice[.//mei:slur]);
-declare variable $hairpins := $doc//mei:hairpin;
-declare variable $dynams := $doc//mei:dynam;
-declare variable $dirs := $doc//mei:dir;
+declare variable $pb.before := $doc//mei:pb[@facs = '#' || $path];
+
+declare variable $snippet := <controlEvents>{
+                                for $elem in $doc//mei:measure[preceding::mei:pb[1]/@xml:id = $pb.before/@xml:id]
+                                return
+                                    $elem
+
+                             }</controlEvents>;
+
+declare variable $surface := $doc//id($path);
+
+declare variable $slurs := $snippet//(mei:slur[not(./parent::mei:*/parent::mei:choice)]|mei:choice[.//mei:slur]);
+declare variable $hairpins := $snippet//mei:hairpin;
+declare variable $dynams := $snippet//mei:dynam;
+declare variable $dirs := $snippet//mei:dir;
 
 declare function local:jsonifySlurs($slurs) {
 
@@ -45,19 +56,18 @@ declare function local:jsonifySlurs($slurs) {
                     let $startID := $elem//@startid[1]
                     let $endID := $elem//@endid[1]
                     
-                    let $event := $elem/root()/id(substring($startID,2))
+                    let $event := $doc/id(substring($startID,2))
                     let $staff := $event/ancestor::mei:staff
                     let $layer :=  $event/ancestor::mei:layer
-                    let $predecessors := $layer//mei:*[local-name() = ('note','chord') and not(parent::mei:chord) and following::mei:*[@xml:id = $event/@xml:id]]
+(:                    let $predecessors := $layer//mei:*[local-name() = ('note','chord') and not(parent::mei:chord) and following::mei:*[@xml:id = $event/@xml:id]]:)
                     
-                    let $endUri := concat($freidi-pmd:ce-data,$parentCollectionURI)
-                    let $endEvent := if($elem/root()/id(substring($endID,2)))then($elem/root()/id(substring($endID,2)))else(collection($endUri)/id(substring($endID,2)))
-                    let $endPageName := concat($endEvent/root()/mei:mei/@xml:id,'.xml')
+                    let $endEvent := $doc/id(substring($endID,2))
+                    (:let $endPageName := concat($doc/mei:mei/@xml:id,'.xml'):)
                     
                     let $endStaff := $endEvent/ancestor::mei:staff
                     let $endLayer :=  $endEvent/ancestor::mei:layer
                     let $endMeasure := $endLayer/ancestor::mei:measure
-                    let $endPredecessors := $endLayer//mei:*[local-name() = ('note','chord') and not(parent::mei:chord) and following::mei:*[@xml:id = $endEvent/@xml:id]]
+(:                    let $endPredecessors := $endLayer//mei:*[local-name() = ('note','chord') and not(parent::mei:chord) and following::mei:*[@xml:id = $endEvent/@xml:id]]:)
                     
                     let $curvedir := $elem//@curvedir[1]
                     let $staffText := $elem//@staff[1]
@@ -80,12 +90,13 @@ declare function local:jsonifySlurs($slurs) {
                             '"tstamp":"',$tstamp,'",',
                             '"tstamp2":"',$tstamp2,'",',
                             '"curvedir":"',$curvedir,'",',
+                            '"docUri":"',substring-after(document-uri($doc),$freidi-pmd:ce-data),'",',
                             '"staff":"',$staffText,'",',
                             '"startStaffID":"',$staff/@xml:id,'",',
                             '"endStaffID":"',$endStaff/@xml:id,'",',
-                            '"endPageName":"',$endPageName,'",',
+                            (:'"endPageName":"',$endPageName,'",',:)
                             '"placement":"',$placement,'",',
-                            '"xml":"',replace(replace(serialize($elem),'"','&amp;#x0027;'),'\n',''),'"',
+                            '"xml":"',replace(replace(serialize($elem),'"','\\"'),'\n','\\n'),'"',(:serialize(replace(replace(serialize($elem),'"','&amp;#x0027;'),'\n','')),'"',:)
                             '}')
                     
                         (:concat('{"id":"',$id,'",',
@@ -148,7 +159,7 @@ declare function local:jsonifyDirs($dirs) {
 };
 
 (:concat('["',string-join($sources/@xml:id,'","'),'"]'):)
-(
+  (
     '{"slurs":[',
         local:jsonifySlurs($slurs),
     '],"hairpins":[',

@@ -14,10 +14,13 @@ var editor = (function() {
     var changed = false;
     
     var init = function() {
+        
         $('#validateButton').addClass('disabled');
         $('#saveButton').addClass('disabled');
         
-        
+        $('#editToggle').on('change',function(){
+            toggleLock(!arguments[0].target.checked);
+        });
 		$('#validateButton').on("click", validate);
 		$('#saveButton').on("click", save);
 		
@@ -31,6 +34,8 @@ var editor = (function() {
 		addValidListener(changeSaveButtonState);
 		
 		createEditor();
+        $('#editToggle').prop('checked', !editor.getReadOnly()).change();
+
     };
     
     var createEditor = function() {
@@ -41,21 +46,39 @@ var editor = (function() {
         editor.setReadOnly(true);
         editor.getSession().setMode("ace/mode/xml");
         editor.getSession().on('change', onChange);
+        editor.autoIndent = true;
         
         editor.selection.on('changeCursor', onChangeCursor);
     };
     
+    var toggleLock = function(booleanVal){
+        console.log('xmlEditor.toggleLock: ' + booleanVal);
+        //var buttonStatus = ;
+        //var readOnlyStatus = editor.getReadOnly();
+        //(readOnlyStatus === true) ? editor.setReadOnly(false) : editor.setReadOnly(true);
+        editor.setReadOnly(booleanVal);
+    };
+    
     var onChange = function() {
-        
-        if(isSettingContent) return;
-        
         console.log('editor.onChange()');
         
+        if(isSettingContent === true){
+            console.log('return isSettingContent');
+           return
+        }
+        
         changed = true;
+        console.log('set changed to: ' + changed);
         setDirty();
 
         lastChange = new Date().getTime();
         setTimeout(checkWellFormedness, 1020);
+
+        
+        guiEditor.setChanged();
+        console.log('called guiEditor.setChanged()');
+        //guiEditor.storeControlEvent();
+        //controlevents.updateControlEventProperty(controlEvent.id,contorlEvent.type,'xml',editor.getValue());
     };
     
     var onChangeCursor = function(event, session) {
@@ -85,20 +108,20 @@ var editor = (function() {
             }
         });*/
         
-        new jQuery.ajax('resources/xql/getControlEvent.xql', {
+/*        new jQuery.ajax('resources/xql/getControlEvent.xql', {
             method: 'get',
-            data: {path: sourcePath, id: elemID},
+            data: {path: sourcePath.docUri, id: sourcePath.id},
             success: function(result) {
                 var response = result || '';
                 
-                /*
+                /\*
                 doesn't load in xml mode!!!
                 
                 if(!jQuery.isXMLDoc(result)) {
                     console.log('The file available from ' + sourcePath + ' is not a valid XML file.');
                     return;
                 }
-                */
+                *\/
                 
                 //todo: check if changed is true, then put to array of saveable objects
                 
@@ -106,7 +129,10 @@ var editor = (function() {
                 editor.setValue(response, -1);
                 isSettingContent = false;
             }
-        });
+        });*/
+        /*isSettingContent = true;
+        setEditorValue(guiEditor.getControlEvent().xml);
+        isSettingContent = false;*/
         
     };
     
@@ -189,7 +215,6 @@ var editor = (function() {
     };
     
     var save = function() {
-        console.log('init save in xmlEditor.js');
     
         if($('#saveButton').hasClass('disabled')) return;
     
@@ -279,6 +304,12 @@ var editor = (function() {
     
     var getEditorValue = function() {
         return editor.getValue();
+    };
+    
+    var setEditorValue = function(xmlString) {
+        //isSettingContent = true;
+        return editor.setValue(xmlString, -1);
+        //isSettingContent = false;
     };
     
     var addWellFormedListener = function(listener) {
@@ -467,6 +498,10 @@ var editor = (function() {
     
  /**JK ab hier**/   
     
+    var setIsSettingContent = function(booleanVal){
+      isSettingContent = booleanVal;
+    };
+    
     var setAttribute = function(attribute, value) {
         editor.clearSelection();
         
@@ -513,7 +548,6 @@ var editor = (function() {
     var setBlank = function() {
         isSettingContent = true;
         editor.setValue('', -1);
-        isSettingContent = false;
     };
     
     var getTemplate = function(type,id) {
@@ -543,6 +577,9 @@ var editor = (function() {
         setAttribute: setAttribute,
         wrapWithChoice: wrapWithChoice,
         setBlank: setBlank,
-        getTemplate: getTemplate
+        getTemplate: getTemplate,
+        toggleLock: toggleLock,
+        setEditorValue: setEditorValue,
+        setIsSettingContent: setIsSettingContent
     };
 })();
