@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project default="xar" name="proofMEIdata">
   
-  <property name="project.version" value="0.6.2-alpha"/>
+  <property name="project.version" value="0.7.0-alpha"/>
   <property name="project.app" value="proofMEIdata"/>
   <property name="build.dir" value="build"/>
   
