@@ -351,6 +351,8 @@ var guiEditor = (function() {
                 controlEvent.startIDs.push(noteID);
                 
                 editor.wrapWithChoice(controlEvent.startIDs,controlEvent.endIDs,controlEvent.tstamp,controlEvent.tstamp2);
+                $('#tableRow_' + controlEvent.id + ' td.startLabel').text(controlEvent.startIDs[0]);
+                $('#tableRow_' + controlEvent.id + ' td.startLabel').toggleClass('danger', true);
                 
                 
             } else if(controlEvent.startIDs.length == 1 && controlEvent.startIDs[0] == noteID) {
@@ -370,6 +372,8 @@ var guiEditor = (function() {
                 };
                 
                 editor.wrapWithChoice(controlEvent.startIDs,controlEvent.endIDs,controlEvent.tstamp,controlEvent.tstamp2);
+                $('#tableRow_' + controlEvent.id + ' td.startLabel').text(controlEvent.startIDs[0]);
+                $('#tableRow_' + controlEvent.id + ' td.startLabel').toggleClass('danger', true);
                 
             } else {
                 
@@ -387,6 +391,8 @@ var guiEditor = (function() {
                 };
                 
                 editor.wrapWithChoice(controlEvent.startIDs,controlEvent.endIDs,controlEvent.tstamp,controlEvent.tstamp2);
+                $('#tableRow_' + controlEvent.id + ' td.startLabel').text(controlEvent.startIDs[0]);
+                $('#tableRow_' + controlEvent.id + ' td.startLabel').toggleClass('danger', true);
                 
                 //todo: rewrite editor with choices, or, in case of just one startid, with only this.
             }
@@ -405,6 +411,8 @@ var guiEditor = (function() {
                 controlEvent.endIDs.push(noteID);
                 
                 editor.wrapWithChoice(controlEvent.startIDs,controlEvent.endIDs,controlEvent.tstamp,controlEvent.tstamp2);
+                $('#tableRow_' + controlEvent.id + ' td.endLabel').text(controlEvent.endIDs[0]);
+                $('#tableRow_' + controlEvent.id + ' td.endLabel').toggleClass('danger', true);
                 
             } else if(controlEvent.endIDs.length == 1 && controlEvent.endIDs[0] == noteID) {
                 
@@ -423,6 +431,8 @@ var guiEditor = (function() {
                 };
                 
                 editor.wrapWithChoice(controlEvent.startIDs,controlEvent.endIDs,controlEvent.tstamp,controlEvent.tstamp2);
+                $('#tableRow_' + controlEvent.id + ' td.endLabel').text(controlEvent.endIDs[0]);
+                $('#tableRow_' + controlEvent.id + ' td.endLabel').toggleClass('danger', true);
                 
             } else {
                 
@@ -437,6 +447,8 @@ var guiEditor = (function() {
                 };
                 
                 editor.wrapWithChoice(controlEvent.startIDs,controlEvent.endIDs,controlEvent.tstamp,controlEvent.tstamp2);
+                $('#tableRow_' + controlEvent.id + ' td.endLabel').text(controlEvent.endIDs[0]);
+                $('#tableRow_' + controlEvent.id + ' td.endLabel').toggleClass('danger', true);
             }
             
             
