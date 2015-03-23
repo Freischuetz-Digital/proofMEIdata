@@ -176,7 +176,8 @@ var guiEditor = (function() {
             $('#' + controlEvent.type + 'Curvedir').on('change',function(e){
                 var target = e.currentTarget;
                 console.log('changing curvedir to ' + $(target).val());
-                $('#tableRow_' + controlEvent.id + ' td.curvedir').text($(target).val());
+                //$('#tableRow_' + controlEvent.id + ' td.curvedir').text($(target).val());
+                controlevents.updateProperty(controlEvent.id,controlEvent.type,'curvedir',$(target).val());
                 editor.setAttribute('curvedir', $(target).val());
             });
                 
@@ -232,7 +233,7 @@ var guiEditor = (function() {
     
     var unloadControlEvent = function() {
         
-        controlevents.removeHighlight();
+        controlevents.removeHighlightRow();
         
         $('#slurCurvedir').off();
         grid.unhighlight();
@@ -296,7 +297,7 @@ var guiEditor = (function() {
         console.log('guiEditor.setChanged '+ controlEvent.id);
         controlEvent.changed = true;
         guiEditor.storeControlEvent();
-        controlevents.highlightRow(controlEvent.id,'danger');
+        //controlevents.highlightRow(controlEvent.id,'danger');
     };
     
     
@@ -351,9 +352,9 @@ var guiEditor = (function() {
                 controlEvent.startIDs.push(noteID);
                 
                 editor.wrapWithChoice(controlEvent.startIDs,controlEvent.endIDs,controlEvent.tstamp,controlEvent.tstamp2);
-                $('#tableRow_' + controlEvent.id + ' td.startLabel').text(controlEvent.startIDs[0]);
-                $('#tableRow_' + controlEvent.id + ' td.startLabel').toggleClass('danger', true);
                 
+                //controlevents.highlightCell(controlEvent.id,' td.startLabel','danger');
+                controlevents.updateProperty(controlEvent.id,controlEvent.type,'startIDs',controlEvent.startIDs);
                 
             } else if(controlEvent.startIDs.length == 1 && controlEvent.startIDs[0] == noteID) {
                 
@@ -372,8 +373,9 @@ var guiEditor = (function() {
                 };
                 
                 editor.wrapWithChoice(controlEvent.startIDs,controlEvent.endIDs,controlEvent.tstamp,controlEvent.tstamp2);
-                $('#tableRow_' + controlEvent.id + ' td.startLabel').text(controlEvent.startIDs[0]);
-                $('#tableRow_' + controlEvent.id + ' td.startLabel').toggleClass('danger', true);
+                //$('#tableRow_' + controlEvent.id + ' td.startLabel').text(controlEvent.startIDs[0]);
+                //$('#tableRow_' + controlEvent.id + ' td.startLabel').toggleClass('danger', true);
+                controlevents.updateProperty(controlEvent.id,controlEvent.type,'startIDs',controlEvent.startIDs);
                 
             } else {
                 
@@ -391,8 +393,9 @@ var guiEditor = (function() {
                 };
                 
                 editor.wrapWithChoice(controlEvent.startIDs,controlEvent.endIDs,controlEvent.tstamp,controlEvent.tstamp2);
-                $('#tableRow_' + controlEvent.id + ' td.startLabel').text(controlEvent.startIDs[0]);
-                $('#tableRow_' + controlEvent.id + ' td.startLabel').toggleClass('danger', true);
+                //$('#tableRow_' + controlEvent.id + ' td.startLabel').text(controlEvent.startIDs[0]);
+                //$('#tableRow_' + controlEvent.id + ' td.startLabel').toggleClass('danger', true);
+                controlevents.updateProperty(controlEvent.id,controlEvent.type,'startIDs',controlEvent.startIDs);
                 
                 //todo: rewrite editor with choices, or, in case of just one startid, with only this.
             }
@@ -411,8 +414,9 @@ var guiEditor = (function() {
                 controlEvent.endIDs.push(noteID);
                 
                 editor.wrapWithChoice(controlEvent.startIDs,controlEvent.endIDs,controlEvent.tstamp,controlEvent.tstamp2);
-                $('#tableRow_' + controlEvent.id + ' td.endLabel').text(controlEvent.endIDs[0]);
-                $('#tableRow_' + controlEvent.id + ' td.endLabel').toggleClass('danger', true);
+                //$('#tableRow_' + controlEvent.id + ' td.endLabel').text(controlEvent.endIDs[0]);
+                //$('#tableRow_' + controlEvent.id + ' td.endLabel').toggleClass('danger', true);
+                controlevents.updateProperty(controlEvent.id,controlEvent.type,'endIDs',controlEvent.endIDs);
                 
             } else if(controlEvent.endIDs.length == 1 && controlEvent.endIDs[0] == noteID) {
                 
@@ -431,8 +435,9 @@ var guiEditor = (function() {
                 };
                 
                 editor.wrapWithChoice(controlEvent.startIDs,controlEvent.endIDs,controlEvent.tstamp,controlEvent.tstamp2);
-                $('#tableRow_' + controlEvent.id + ' td.endLabel').text(controlEvent.endIDs[0]);
-                $('#tableRow_' + controlEvent.id + ' td.endLabel').toggleClass('danger', true);
+                //$('#tableRow_' + controlEvent.id + ' td.endLabel').text(controlEvent.endIDs[0]);
+                //$('#tableRow_' + controlEvent.id + ' td.endLabel').toggleClass('danger', true);
+                controlevents.updateProperty(controlEvent.id,controlEvent.type,'endIDs',controlEvent.endIDs);
                 
             } else {
                 
@@ -447,8 +452,9 @@ var guiEditor = (function() {
                 };
                 
                 editor.wrapWithChoice(controlEvent.startIDs,controlEvent.endIDs,controlEvent.tstamp,controlEvent.tstamp2);
-                $('#tableRow_' + controlEvent.id + ' td.endLabel').text(controlEvent.endIDs[0]);
-                $('#tableRow_' + controlEvent.id + ' td.endLabel').toggleClass('danger', true);
+                //$('#tableRow_' + controlEvent.id + ' td.endLabel').text(controlEvent.endIDs[0]);
+                //$('#tableRow_' + controlEvent.id + ' td.endLabel').toggleClass('danger', true);
+                controlevents.updateProperty(controlEvent.id,controlEvent.type,'endIDs',controlEvent.endIDs);
             }
             
             
