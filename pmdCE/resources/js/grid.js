@@ -260,7 +260,6 @@ var grid = (function() {
         
         for(var i=0;i<zoneArray.length;i++) {
             var zone = zoneArray[i];
-            
             var tmpl = $('#templates .zoneButton').clone();
             var top = (zone.uly / 2 + zone.lry / 2) / page.height * 100;
             var left = (zone.lrx / 2 + zone.ulx / 2) / page.width * 100;
@@ -268,7 +267,7 @@ var grid = (function() {
             tmpl.css('top',top + '%');
             tmpl.css('left', left + '%');
             tmpl.attr('title',zone.targetID);
-            tmpl.on('click',onClickFunc);
+            tmpl.on('click',zone,onClickFunc);
             
             $('#overlaidItems').append(tmpl);
         }

@@ -99,6 +99,7 @@ var controlevents = (function(){
         obj.tstamp2 = '';
         obj.startStaffID = '';
         obj.staff = '';
+        obj.docUri = currentSourcePath;
         
         if(type === 'slur') {
             obj.endIDs = new Array();

@@ -114,6 +114,26 @@
             <xsl:apply-templates select="node() | @*" mode="#current"/>
         </xsl:copy>
     </xsl:template>
+  
+  <!-- ignore cpMarks -->
+    <xsl:template match="mei:cpMark"/>
+  
+  <!-- sic -->
+  <!-- abbr -->
+  <!-- expan -->
+    <xsl:template match="mei:choice" mode="#all">
+        <xsl:choose>
+            <xsl:when test="mei:sic and mei:corr">
+                <xsl:apply-templates select="mei:sic/*" mode="#current"/>
+            </xsl:when>
+            <xsl:when test="mei:abbr and mei:expan">
+                <xsl:apply-templates select="mei:expan/*" mode="#current"/>
+            </xsl:when>
+            <xsl:when test="mei:orig and mei:reg">
+                <xsl:apply-templates select="mei:reg/*" mode="#current"/>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
     
     <!-- generic copy template -->
     <xsl:template match="node() | @*" mode="#all">

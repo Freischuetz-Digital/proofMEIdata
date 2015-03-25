@@ -22,8 +22,8 @@ let $change :=
     let $operation := $x/string(@operation)
     let $content := $x/*
     let $startIDs := $content/descendant-or-self::mei:slur/string(@startid)
-    let $doc := doc('/db/apps/controlevents-data/' || $source)
-    let $measure := local:findMeasure($doc, $startIDs)
+    let $doc := if(ends-with($source,'.xml'))then(doc('/db/apps/controlevents-data/' || $source))else(collection('/db/apps/controlevents-data/')/id($source)/root())
+    let $measure := local:findMeasure($doc, $startIDs[1])
     let $change := 
         switch($operation)
             case 'create' return
