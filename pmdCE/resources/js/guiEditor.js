@@ -523,7 +523,7 @@ var guiEditor = (function() {
         
         var obj = new Object();
         obj.id = controlEvent.id;
-        obj.sourcePath = sourcePath;
+        obj.sourcePath = controlEvent.docUri;
         obj.operation = 'remove';
         obj.code = '';
         
