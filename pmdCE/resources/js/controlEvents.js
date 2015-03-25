@@ -86,9 +86,11 @@ var controlevents = (function(){
               getControlEvents()[type+'s'][index][property] = val;
               break;
             case 'array':
-              getControlEvents()[type+'s'][index][property] = [];
+              //getControlEvents()[type+'s'][index][property] = [];
               $.each(val, function(index,value){
-                getControlEvents()[type+'s'][index][property].push(value);
+                if($.inArray(value, controlevents.getControlEvents()[type+'s'][index][property]) == -1){
+                  controlevents.getControlEvents()[type+'s'][index][property].push(value);
+                };
               });
               break;
             case 'boolan':
