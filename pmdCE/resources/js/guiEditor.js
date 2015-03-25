@@ -331,7 +331,7 @@ var guiEditor = (function() {
         
         console.log('setNote(' + position +','+ note.id + ','+ mode + ')');
         
-        if((position != 'start' && position != 'end') || (mode != 'add' && mode != 'replace'))
+        if((position !== 'start' && position !== 'end') || (mode !== 'add' && mode !== 'replace'))
             return;
         
         var noteID = note.id.substr((position === 'start') ? startPrefix.length : endPrefix.length);
@@ -344,9 +344,13 @@ var guiEditor = (function() {
         
         if(position === 'start') {
             if(mode === 'replace') {
+                if(controlEvent.startIDs.indexOf(noteID) !== -1){
+                  console.log('guiEditor.setNote '+ note.id + ' already in array ' + position);
+                  return;
+                }else{
                 //console.log('replace startid with ' + noteID);
                 resetNotes($(selector));
-                paintNotes($(note),placement);
+                paintNotes($(note),'obvious');//TODO calculate placement
                                 
                 controlEvent.startIDs.length = 0;
                 controlEvent.startIDs.push(noteID);
@@ -356,10 +360,11 @@ var guiEditor = (function() {
                 //controlevents.highlightCell(controlEvent.id,' td.startLabel','danger');
                 controlevents.updateProperty(controlEvent.id,controlEvent.type,'startIDs',controlEvent.startIDs);
                 
-            } else if(controlEvent.startIDs.length == 1 && controlEvent.startIDs[0] == noteID) {
+            /*} else if(controlEvent.startIDs.length == 1 && controlEvent.startIDs[0] == noteID) {
                 
-                //console.log('hitted the current one');
-                return;
+                //console.log('hit the current one');
+                return;*/
+              }
                 
             } else if(controlEvent.startIDs.indexOf(noteID) == -1) {
                 
