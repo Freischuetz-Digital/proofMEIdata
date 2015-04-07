@@ -172,6 +172,8 @@ var guiEditor = (function() {
                 $('#' + controlEvent.type + 'Curvedir').val('above');
             else if(controlEvent.curvedir === 'below') 
                 $('#' + controlEvent.type + 'Curvedir').val('below');
+            else if(controlEvent.curvedir === 'mixed') 
+                $('#' + controlEvent.type + 'Curvedir').val('mixed');
                 
             $('#' + controlEvent.type + 'Curvedir').on('change',function(e){
                 var target = e.currentTarget;
