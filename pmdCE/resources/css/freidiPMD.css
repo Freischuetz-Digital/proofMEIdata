@@ -1,3 +1,11 @@
+svg .layer .note  {
+  fill-opacity: 0.6;
+}
+
+svg:not(:root) {
+    overflow: auto;
+}
+
 .navbar-brand {
     background-image: url("../../../resources/pix/Logo_miniInset.png");
     background-position: 15px 8px;

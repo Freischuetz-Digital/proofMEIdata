@@ -479,8 +479,9 @@ var guiEditor = (function() {
                 
                 var options = JSON.stringify({ 
                     inputFormat: 'mei',
-                    pageWidth: $(selector).width() * 3, 
-                    pageHeight: $(selector).height() * 2, 
+                    pageWidth: $(selector).width()*4, 
+                    pageHeight: $(selector).height()-10, 
+                    scale: 30,
                     border: 0,
                     ignoreLayout: 0 
                 });

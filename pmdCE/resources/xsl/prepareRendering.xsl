@@ -26,34 +26,34 @@
     </xsl:template>
     
     <!-- if a layer contains chords, this template splits them up and creates multiple layers -->
-    <xsl:template match="mei:layer">
+    <!--<xsl:template match="mei:layer">
         
-        <!-- get the maximum number of notes in a chord -->
+        <!-\- get the maximum number of notes in a chord -\->
         <xsl:variable name="maxNotes" select="if(.//mei:chord) then(max(.//mei:chord/count(.//mei:note))) else(0)" as="xs:integer"/>
         
-        <!-- put the original layer in a variable to make it more accessible in later processing -->
+        <!-\- put the original layer in a variable to make it more accessible in later processing -\->
         <xsl:variable name="layer" select="./mei:*" as="node()*"/>
         <xsl:choose>
             
-            <!-- when the chord contains no layers, just copy the layer-->
+            <!-\- when the chord contains no layers, just copy the layer-\->
             <xsl:when test="$maxNotes = 0">
                 <xsl:copy>
                     <xsl:apply-templates select="node() | @*"/>
                 </xsl:copy>
             </xsl:when>
             
-            <!-- the layer contains chords -->
+            <!-\- the layer contains chords -\->
             <xsl:otherwise>
-                <!-- process the layer in mode getFirstNote -->
+                <!-\- process the layer in mode getFirstNote -\->
                 <xsl:copy>
                     <xsl:apply-templates select="node() | @*" mode="getFirstNote"/>
                 </xsl:copy>
-                <!-- for all notes beyond the first, create additional layers -->
+                <!-\- for all notes beyond the first, create additional layers -\->
                 <xsl:for-each select="(2 to $maxNotes)">
                     <xsl:variable name="i" select="."/>
                     <layer xmlns="http://www.music-encoding.org/ns/mei">
                         
-                        <!-- for each iteration, pass in its "number" as parameter  -->
+                        <!-\- for each iteration, pass in its "number" as parameter  -\->
                         <xsl:apply-templates select="$layer" mode="stripToLayer">
                             <xsl:with-param name="noteNum" select="$i" tunnel="yes" as="xs:integer"/>
                         </xsl:apply-templates>
@@ -61,15 +61,15 @@
                 </xsl:for-each>
             </xsl:otherwise>
         </xsl:choose>
-    </xsl:template>
+    </xsl:template>-->
     
     <!-- in getFirstNote mode, replace chords with a note element. this note gets all attributes
         from the chord (except the chord/@xml:id) and all attributes from the first contained note -->
-    <xsl:template match="mei:chord" mode="getFirstNote">
+    <!--<xsl:template match="mei:chord" mode="getFirstNote">
         <note xmlns="http://www.music-encoding.org/ns/mei">
             <xsl:apply-templates select="(@* except @xml:id) | ./mei:note[1]/@*" mode="#current"/>
         </note>
-    </xsl:template>
+    </xsl:template>-->
     
     <!-- for all subsequent "new" layers, replace everything with a duration that is not a chord with a space of equal duration.
         this avoids rendering single notes and rests multiple times -->
@@ -80,24 +80,24 @@
     </xsl:template>
     
     <!-- handling of chords in subsequent "new" layers. this template gets priority over the template matching "mei:*[@dur]" in mode="stripToLayer" -->
-    <xsl:template match="mei:chord" mode="stripToLayer" priority="1">
-        <!-- identify in which iteration we are -->
+    <!--<xsl:template match="mei:chord" mode="stripToLayer" priority="1">
+        <!-\- identify in which iteration we are -\->
         <xsl:param name="noteNum" tunnel="yes" as="xs:integer"/>
         <xsl:choose>
-            <!-- if this particular chord has sufficient notes, create a note for this layer -->
+            <!-\- if this particular chord has sufficient notes, create a note for this layer -\->
             <xsl:when test="exists(./mei:note[$noteNum])">
                 <note xmlns="http://www.music-encoding.org/ns/mei">
                     <xsl:apply-templates select="(@* except @xml:id) | ./mei:note[$noteNum]/@*" mode="#current"/>
                 </note>
             </xsl:when>
-            <!-- if this particular chord doesn't have sufficient notes, create a space of corresponding duration instead -->
+            <!-\- if this particular chord doesn't have sufficient notes, create a space of corresponding duration instead -\->
             <xsl:otherwise>
                 <space xmlns="http://www.music-encoding.org/ns/mei">
                     <xsl:apply-templates select="@dur | @dots" mode="#current"/>
                 </space>
             </xsl:otherwise>
         </xsl:choose>
-    </xsl:template>
+    </xsl:template>-->
     
     <!-- for the additional "new" layers, ignore beams -->
     <xsl:template match="mei:beam" mode="stripToLayer">
